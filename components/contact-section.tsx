@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 export function ContactSection() {
   return (
-    <SectionContainer id="contact" className="flex flex-col gap-6 py-12 border-t border-border">
+    <SectionContainer id="contact" className="flex flex-col gap-6 border-t border-border">
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           Contact
@@ -17,6 +17,7 @@ export function ContactSection() {
           Find me on these platforms
         </p>
       </div>
+
       <div className="flex flex-wrap gap-3">
         <a
           href="https://github.com/Rupak182"
@@ -24,7 +25,7 @@ export function ContactSection() {
           rel="noopener noreferrer"
           className={cn(
             buttonVariants({ variant: "outline", size: "default" }),
-            "rounded-full gap-2 border-border text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center"
+            "rounded-full gap-2 border-border text-muted-foreground hover:text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center transition-colors"
           )}
         >
           <FaGithub className="h-4 w-4" />
@@ -36,7 +37,7 @@ export function ContactSection() {
           rel="noopener noreferrer"
           className={cn(
             buttonVariants({ variant: "outline", size: "default" }),
-            "rounded-full gap-2 border-border text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center"
+            "rounded-full gap-2 border-border text-muted-foreground hover:text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center transition-colors"
           )}
         >
           <FaXTwitter className="h-4 w-4" />
@@ -48,7 +49,7 @@ export function ContactSection() {
           rel="noopener noreferrer"
           className={cn(
             buttonVariants({ variant: "outline", size: "default" }),
-            "rounded-full gap-2 border-border text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center"
+            "rounded-full gap-2 border-border text-muted-foreground hover:text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center transition-colors"
           )}
         >
           <FaLinkedin className="h-4 w-4" />
@@ -58,7 +59,7 @@ export function ContactSection() {
           href="mailto:rupakgoura@gmail.com"
           className={cn(
             buttonVariants({ variant: "outline", size: "default" }),
-            "rounded-full gap-2 border-border text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center"
+            "rounded-full gap-2 border-border text-muted-foreground hover:text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center transition-colors"
           )}
         >
           <FaEnvelope className="h-4 w-4" />
@@ -70,7 +71,7 @@ export function ContactSection() {
           rel="noopener noreferrer"
           className={cn(
             buttonVariants({ variant: "outline", size: "default" }),
-            "rounded-full gap-2 border-border text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center"
+            "rounded-full gap-2 border-border text-muted-foreground hover:text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center transition-colors"
           )}
         >
           <FaFileAlt className="h-4 w-4" />

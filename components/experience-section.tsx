@@ -20,21 +20,19 @@ function ExperienceItem({
   description,
 }: ExperienceItemProps) {
   return (
-    <div className="flex gap-4 sm:gap-6">
-      <div className="flex flex-col items-center">
-        <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
-          {logo ? (
-            <Image
-              src={logo}
-              alt={`${company} Logo`}
-              fill
-              sizes="48px"
-              className="object-cover p-1"
-            />
-          ) : (
-            fallbackIcon || <Calendar className="h-5 w-5 text-muted-foreground" />
-          )}
-        </div>
+    <div className="flex items-start gap-3 sm:gap-6">
+      <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
+        {logo ? (
+          <Image
+            src={logo}
+            alt={`${company} Logo`}
+            fill
+            sizes="(max-width: 640px) 40px, 48px"
+            className="object-cover p-1"
+          />
+        ) : (
+          fallbackIcon || <Calendar className="h-5 w-5 text-muted-foreground" />
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-1.5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
@@ -65,14 +63,14 @@ interface OSSItemProps {
 
 function OSSItem({ project, logo, fallbackIcon, description }: OSSItemProps) {
   return (
-    <div className="flex gap-4 sm:gap-6">
-      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
+    <div className="flex items-start gap-3 sm:gap-6">
+      <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
         {logo ? (
           <Image
             src={logo}
             alt={`${project} Logo`}
             fill
-            sizes="48px"
+            sizes="(max-width: 640px) 40px, 48px"
             className="object-cover p-1.5"
           />
         ) : (
@@ -152,25 +150,25 @@ export function ExperienceSection() {
           Hackathons
         </h2>
         <div className="flex flex-col gap-6">
-          <div className="flex gap-4 sm:gap-6">
-            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
+          <div className="flex items-start gap-3 sm:gap-6">
+            <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
               <Image
                 src="/assets/juspay.png"
                 alt="Juspay Logo"
                 fill
-                sizes="48px"
+                sizes="(max-width: 640px) 40px, 48px"
                 className="object-cover p-1.5"
               />
             </div>
             <div className="flex flex-1 flex-col justify-center">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-foreground text-base">Juspay UI Hackathon</h3>
-                <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-800">
-                  {/* <Trophy className="mr-1 h-3.5 w-3.5 text-yellow-600" /> Qualified */}
-                </span>
+                {/* <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-800">
+                  <Trophy className="mr-1 h-3.5 w-3.5 text-yellow-600" /> Qualified
+                </span> */}
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                Built a Nested Drawer Component with the help of ShadCN with customization options.
+                Qualifed for Justpay UI Hacakthon where I Built a Nested Drawer Component with the help of ShadCN with customization options.
               </p>
             </div>
           </div>

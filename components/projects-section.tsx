@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { ExternalLink } from "lucide-react"
 import { SectionContainer } from "@/components/section-container"
+import { BorderBeam } from "@/components/ui/border-beam"
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -27,7 +28,7 @@ interface ProjectItem {
 const PROJECTS_DATA: ProjectItem[] = [
   {
     title: "HeyCode",
-    description: "Built a local-first, monorepo AI CLI Coding assistant using Bun, Hono, and React (OpenTUI). Integrated Vercel AI SDK to power a dual-mode agent for coding tasks. Added SQLite local storage with WAL mode to support concurrent multi-terminal usage.",
+    description: "Built a local-first, monorepo AI CLI Coding assistant using Bun, Hono, and React (OpenTUI). Integrated Vercel AI SDK to support multiple models. Added SQLite local storage with WAL mode .",
     image: "/assets/heycode.png",
     tags: ["Bun", "Hono", "React", "AI SDK", "SQLite", "Git", "WAL", "OpenTUI"],
     websiteUrl: "https://github.com/Rupak182/HeyCode", // Default placeholder links
@@ -35,7 +36,7 @@ const PROJECTS_DATA: ProjectItem[] = [
   },
   {
     title: "AI Logo Generator",
-    description: "An AI based logo generator to generate logos based on their provided data. Deployed a self-hosted Flux Schnell model with FastAPI and Inngest to manage queues (50+ signups).",
+    description: "An AI based logo generator to generate logos based on their provided data. Deployed a Flux Schnell model with FastAPI and Inngest to manage queues (50+ signups).",
     image: "/assets/gensi.png",
     tags: ["Next.js", "Typescript", "Shadcn UI", "FastAPI", "Inngest", "Flux Schnell"],
     websiteUrl: "https://github.com/Rupak182/AI-Logo-Generator",
@@ -61,8 +62,18 @@ const PROJECTS_DATA: ProjectItem[] = [
 
 function ProjectCard({ project }: { project: ProjectItem }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-zinc-300 dark:hover:border-zinc-700">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-zinc-300 dark:hover:border-zinc-700">
+      <div className="absolute inset-0 rounded-[inherit] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <BorderBeam
+          size={120}
+          duration={6}
+          borderWidth={1.5}
+          colorFrom="var(--border-beam-from)"
+          colorTo="var(--border-beam-to)"
+        />
+      </div>
       <div className="relative aspect-video w-full overflow-hidden bg-zinc-100">
+
         <Image
           src={project.image}
           alt={`${project.title} Preview`}
@@ -123,7 +134,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
 
 export function ProjectsSection() {
   return (
-    <SectionContainer id="projects" className="flex flex-col gap-6 py-12 border-t border-border">
+    <SectionContainer id="projects" className="flex flex-col gap-6 border-t border-border">
       <div className="flex flex-col gap-1.5">
         <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           My Projects

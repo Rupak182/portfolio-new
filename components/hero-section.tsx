@@ -3,7 +3,7 @@ import { SectionContainer } from "@/components/section-container"
 
 export function HeroSection() {
   return (
-    <SectionContainer id="hero" className="flex flex-col gap-6 pt-20 pb-12">
+    <SectionContainer id="hero" className="flex flex-col gap-6 pt-16 md:pt-20">
       <div className="flex flex-col-reverse gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-2">
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-heading">
@@ -30,3 +30,5 @@ export function HeroSection() {
     </SectionContainer>
   )
 }
+
+
