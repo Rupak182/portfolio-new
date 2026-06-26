@@ -111,12 +111,12 @@ export function BottomDock() {
                     <AnimatedThemeToggler
                       theme={resolvedTheme as "light" | "dark"}
                       onThemeChange={(newTheme) => setTheme(newTheme)}
-                      className="outline-none [&_svg]:h-5 [&_svg]:w-5"
+                      className="w-full h-full flex items-center justify-center outline-none [&_svg]:h-5 [&_svg]:w-5 [&_svg]:pointer-events-none"
                     />
                   ) : (
                     <AnimatedThemeToggler
                       theme="dark"
-                      className="outline-none [&_svg]:h-5 [&_svg]:w-5"
+                      className="w-full h-full flex items-center justify-center outline-none [&_svg]:h-5 [&_svg]:w-5 [&_svg]:pointer-events-none"
                     />
                   )}
                 </div>
