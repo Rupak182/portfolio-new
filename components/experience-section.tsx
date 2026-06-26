@@ -32,7 +32,7 @@ function ExperienceItem({
               className="object-cover p-1"
             />
           ) : (
-            fallbackIcon || <Calendar className="h-5 w-5 text-secondary" />
+            fallbackIcon || <Calendar className="h-5 w-5 text-muted-foreground" />
           )}
         </div>
       </div>
@@ -40,13 +40,13 @@ function ExperienceItem({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
           <div>
             <h3 className="font-semibold text-foreground text-base">{company}</h3>
-            <p className="text-sm text-secondary font-medium">{role}</p>
+            <p className="text-sm text-muted-foreground font-medium">{role}</p>
           </div>
-          <span className="text-xs text-secondary/80 font-medium sm:text-right shrink-0">
+          <span className="text-xs text-muted-foreground/80 font-medium sm:text-right shrink-0">
             {period}
           </span>
         </div>
-        <ul className="list-disc pl-4 text-sm text-secondary leading-relaxed space-y-1 mt-1">
+        <ul className="list-disc pl-4 text-sm text-muted-foreground leading-relaxed space-y-1 mt-1">
           {description.map((bullet, idx) => (
             <li key={idx}>{bullet}</li>
           ))}
@@ -76,12 +76,12 @@ function OSSItem({ project, logo, fallbackIcon, description }: OSSItemProps) {
             className="object-cover p-1.5"
           />
         ) : (
-          fallbackIcon || <Code2 className="h-5 w-5 text-secondary" />
+          fallbackIcon || <Code2 className="h-5 w-5 text-muted-foreground" />
         )}
       </div>
       <div className="flex flex-1 flex-col justify-center">
         <h3 className="font-semibold text-foreground text-base">{project}</h3>
-        <p className="text-sm text-secondary leading-relaxed mt-1">{description}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed mt-1">{description}</p>
       </div>
     </div>
   )
@@ -169,7 +169,7 @@ export function ExperienceSection() {
                   {/* <Trophy className="mr-1 h-3.5 w-3.5 text-yellow-600" /> Qualified */}
                 </span>
               </div>
-              <p className="text-sm text-secondary leading-relaxed mt-1">
+              <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                 Built a Nested Drawer Component with the help of ShadCN with customization options.
               </p>
             </div>

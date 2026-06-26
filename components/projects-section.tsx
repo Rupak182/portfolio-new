@@ -76,7 +76,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
           <h3 className="font-semibold text-foreground text-base tracking-tight">
             {project.title}
           </h3>
-          <p className="text-xs text-secondary leading-relaxed line-clamp-4 min-h-[72px]">
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-4 min-h-[72px]">
             {project.description}
           </p>
         </div>
@@ -128,7 +128,7 @@ export function ProjectsSection() {
         <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
           My Projects
         </h2>
-        <p className="text-sm text-secondary leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           I&apos;ve worked across various frontend and fullstack projects. I have experience with building AI tools too.
         </p>
       </div>

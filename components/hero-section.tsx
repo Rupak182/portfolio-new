@@ -9,7 +9,7 @@ export function HeroSection() {
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl font-sans">
             Rupak Kumar Goura
           </h1>
-          <p className="text-lg font-medium text-secondary">
+          <p className="text-lg font-medium text-muted-foreground">
             Developer
           </p>
         </div>
@@ -24,7 +24,7 @@ export function HeroSection() {
           />
         </div>
       </div>
-      <p className="text-base leading-relaxed text-secondary sm:text-lg max-w-xl">
+      <p className="text-base leading-relaxed text-muted-foreground sm:text-lg max-w-xl">
         A full-stack developer and product builder focused on React/Next.js, Backend and AI integrations. I have experience building voice AI pipelines, developer tools, and contributing to open-source projects.
       </p>
     </SectionContainer>

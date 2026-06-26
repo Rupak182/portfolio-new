@@ -2,6 +2,7 @@ import { HeroSection } from "@/components/hero-section"
 import { ExperienceSection } from "@/components/experience-section"
 import { ProjectsSection } from "@/components/projects-section"
 import { GithubContributionsSection } from "@/components/github-contributions-section"
+import { ToolsSection } from "@/components/tools-section"
 
 export default function Page() {
   return (
@@ -10,6 +11,7 @@ export default function Page() {
       <ExperienceSection />
       <ProjectsSection />
       <GithubContributionsSection />
+      <ToolsSection />
     </main>
   )
 }
