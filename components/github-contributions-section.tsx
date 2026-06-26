@@ -15,7 +15,7 @@ export function GithubContributionsSection() {
 
   return (
     <SectionContainer id="github" className="flex flex-col gap-6 py-12 border-t border-border">
-      <h2 className="text-2xl flex flex-col font-bold tracking-tight text-foreground font-sans">
+      <h2 className="text-2xl flex flex-col font-bold tracking-tight text-foreground font-heading">
         GitHub Contributions
         <span className="text-zinc-400 dark:text-zinc-500 font-normal text-lg ">
           @Rupak182

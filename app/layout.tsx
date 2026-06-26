@@ -1,4 +1,4 @@
-import { DM_Sans, Geist_Mono } from "next/font/google"
+import { DM_Sans, Geist_Mono, Inria_Serif } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -14,6 +14,12 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+const inriaSerif = Inria_Serif({
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
+  variable: "--font-serif",
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +29,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", dmSans.variable)}
+      className={cn("antialiased", fontMono.variable, "font-sans", dmSans.variable, inriaSerif.variable)}
     >
       <body suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>

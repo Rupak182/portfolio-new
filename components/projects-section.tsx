@@ -125,7 +125,7 @@ export function ProjectsSection() {
   return (
     <SectionContainer id="projects" className="flex flex-col gap-6 py-12 border-t border-border">
       <div className="flex flex-col gap-1.5">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           My Projects
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">

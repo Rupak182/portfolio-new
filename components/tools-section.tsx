@@ -49,7 +49,7 @@ const TOOLS_LIST = [
 export function ToolsSection() {
   return (
     <SectionContainer id="tools" className="flex flex-col gap-6 py-12 border-t border-border">
-      <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+      <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
         Tools i have used
       </h2>
       <div className="relative w-full overflow-hidden">

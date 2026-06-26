@@ -10,7 +10,7 @@ export function ContactSection() {
   return (
     <SectionContainer id="contact" className="flex flex-col gap-6 py-12 border-t border-border">
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           Contact
         </h2>
         <p className="text-muted-foreground text-sm font-medium">

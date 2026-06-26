@@ -92,7 +92,7 @@ export function ExperienceSection() {
     <SectionContainer id="experience" className="flex flex-col gap-12 border-t border-border">
       {/* Experience Section */}
       <div className="flex flex-col gap-6">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           Experience
         </h2>
         <div className="flex flex-col gap-8">
@@ -129,7 +129,7 @@ export function ExperienceSection() {
 
       {/* OSS Contributions Section */}
       <div className="flex flex-col gap-6">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           OSS Contributions
         </h2>
         <div className="flex flex-col gap-6">
@@ -148,7 +148,7 @@ export function ExperienceSection() {
 
       {/* Hackathons Section */}
       <div className="flex flex-col gap-6">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground font-sans">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground font-heading">
           Hackathons
         </h2>
         <div className="flex flex-col gap-6">
