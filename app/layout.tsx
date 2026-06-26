@@ -25,13 +25,13 @@ const inriaSerif = Inria_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL("https://rupak182.me"),
   title: {
-    default: "Rupak Goura | Developer & Builder",
+    default: "Rupak Goura | Developer",
     template: "%s | Rupak Goura",
   },
-  description: "A full-stack developer and product builder with deep experience across engineering, product strategy, and user-centric design. Check out my projects and contributions.",
+  description: "Full-stack developer and product builder with experience in frontend, backend, and AI integrations.",
   openGraph: {
     title: "Rupak Goura | Developer & Builder",
-    description: "A full-stack developer and product builder with deep experience across engineering, product strategy, and user-centric design. Check out my projects and contributions.",
+    description: "Full-stack developer and product builder with experience in frontend, backend, and AI integrations.",
     url: "https://rupak182.me",
     siteName: "Rupak Goura",
     images: [
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Rupak Goura | Developer & Builder",
-    description: "A full-stack developer and product builder with deep experience across engineering, product strategy, and user-centric design. Check out my projects and contributions.",
+    description: "Full-stack developer and product builder with experience in frontend, backend, and AI integration.",
     creator: "@Elnora_Hines18",
     images: ["/assets/og.png"],
   },
