@@ -24,7 +24,7 @@ export function HeroSection() {
           />
         </div>
       </div>
-      <p className="text-base leading-relaxed text-muted-foreground sm:text-lg max-w-xl">
+      <p className="text-sm leading-relaxed text-muted-foreground sm:text-lg max-w-xl">
         I am a full-stack developer and product builder with experience on React/Next.js, backend development with frameworks like FastAPI and Hono, and AI integrations. I also have experience building voice AI pipelines, developer tools, and contributing to open-source projects.
       </p>
     </SectionContainer>

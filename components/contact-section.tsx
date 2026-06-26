@@ -32,7 +32,7 @@ export function ContactSection() {
           GitHub
         </a>
         <a
-          href="https://x.com/rupakgoura"
+          href="https://x.com/Elnora_Hines18"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(
@@ -44,7 +44,7 @@ export function ContactSection() {
           Twitter
         </a>
         <a
-          href="https://linkedin.com/in/rupakgoura"
+          href="https://linkedin.com/in/rupak-goura"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(
@@ -56,7 +56,7 @@ export function ContactSection() {
           LinkedIn
         </a>
         <a
-          href="mailto:rupakgoura@gmail.com"
+          href="mailto:rupakgoura18@gmail.com"
           className={cn(
             buttonVariants({ variant: "outline", size: "default" }),
             "rounded-full gap-2 border-border text-muted-foreground hover:text-foreground hover:bg-muted font-medium bg-white dark:bg-zinc-950 px-4 py-2 flex items-center transition-colors"
@@ -66,7 +66,7 @@ export function ContactSection() {
           Mail
         </a>
         <a
-          href="/resume.pdf"
+          href="https://drive.google.com/file/d/1elbb0eqSmbOqaqVSbXnXdtuP9i7ziAw4/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(

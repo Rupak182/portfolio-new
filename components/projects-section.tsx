@@ -31,32 +31,29 @@ const PROJECTS_DATA: ProjectItem[] = [
     description: "Built a local-first, monorepo AI CLI Coding assistant using Bun, Hono, and React (OpenTUI). Integrated Vercel AI SDK to support multiple models. Added SQLite local storage with WAL mode .",
     image: "/assets/heycode.png",
     tags: ["Bun", "Hono", "React", "AI SDK", "SQLite", "Git", "WAL", "OpenTUI"],
-    websiteUrl: "https://github.com/Rupak182/HeyCode", // Default placeholder links
-    sourceUrl: "https://github.com/Rupak182/HeyCode",
+    sourceUrl: "https://github.com/Rupak182/hey-code",
   },
   {
     title: "AI Logo Generator",
     description: "An AI based logo generator to generate logos based on their provided data. Deployed a Flux Schnell model with FastAPI and Inngest to manage queues (50+ signups).",
     image: "/assets/gensi.png",
     tags: ["Next.js", "Typescript", "Shadcn UI", "FastAPI", "Inngest", "Flux Schnell"],
-    websiteUrl: "https://github.com/Rupak182/AI-Logo-Generator",
-    sourceUrl: "https://github.com/Rupak182/AI-Logo-Generator",
+    websiteUrl: "http://gensi.app/",
   },
   {
     title: "Interactive Dashboard",
     description: "An Interactive Dashboard built with Next.js along with Tailwind CSS, Tanstack Table, Shadcn and Recharts.",
     image: "/assets/dashcharts.png",
     tags: ["Next.js", "Typescript", "Shadcn UI", "TailwindCSS", "Recharts", "TanStack Table"],
-    websiteUrl: "https://github.com/Rupak182/Dashboard-NextJS",
-    sourceUrl: "https://github.com/Rupak182/Dashboard-NextJS",
+    websiteUrl: "https://dashchats.vercel.app/",
+    sourceUrl: "https://github.com/Rupak182/dashboard",
   },
   {
     title: "Telemetry Chatbot",
     description: "A lightweight, AI Chatbot, LLM inference logging and ingestion workspace built with a FastAPI backend streaming proxy and a Next.js frontend.",
     image: "/assets/tchat.png",
     tags: ["Next.js", "Fast API", "AI SDK", "Python", "Shad CN", "PostgreSQL"],
-    websiteUrl: "https://github.com/Rupak182/Telemetry-Chatbot",
-    sourceUrl: "https://github.com/Rupak182/Telemetry-Chatbot",
+    sourceUrl: "https://github.com/Rupak182/telemetry-chatbot",
   },
 ]
 

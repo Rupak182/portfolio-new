@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Calendar, Code2, Trophy } from "lucide-react"
+import { Calendar, Code2, Trophy, ArrowUpRight } from "lucide-react"
 import { SectionContainer } from "@/components/section-container"
 
 interface ExperienceItemProps {
@@ -9,6 +9,7 @@ interface ExperienceItemProps {
   role: string
   period: string
   description: string[]
+  websiteUrl?: string
 }
 
 function ExperienceItem({
@@ -18,6 +19,7 @@ function ExperienceItem({
   role,
   period,
   description,
+  websiteUrl,
 }: ExperienceItemProps) {
   return (
     <div className="flex items-start gap-3 sm:gap-6">
@@ -37,7 +39,21 @@ function ExperienceItem({
       <div className="flex flex-1 flex-col gap-1.5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
           <div>
-            <h3 className="font-semibold text-foreground text-base">{company}</h3>
+            <h3 className="font-semibold text-foreground text-base">
+              {websiteUrl ? (
+                <a
+                  href={websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group hover:underline inline-flex items-center gap-0.5 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+                >
+                  {company}
+                  <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+              ) : (
+                company
+              )}
+            </h3>
             <p className="text-sm text-muted-foreground font-medium">{role}</p>
           </div>
           <span className="text-xs text-muted-foreground/80 font-medium sm:text-right shrink-0">
@@ -59,9 +75,10 @@ interface OSSItemProps {
   logo?: string
   fallbackIcon?: React.ReactNode
   description: string
+  pullRequestUrl?: string
 }
 
-function OSSItem({ project, logo, fallbackIcon, description }: OSSItemProps) {
+function OSSItem({ project, logo, fallbackIcon, description, pullRequestUrl }: OSSItemProps) {
   return (
     <div className="flex items-start gap-3 sm:gap-6">
       <div className="relative flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white shadow-sm overflow-hidden">
@@ -78,7 +95,21 @@ function OSSItem({ project, logo, fallbackIcon, description }: OSSItemProps) {
         )}
       </div>
       <div className="flex flex-1 flex-col justify-center">
-        <h3 className="font-semibold text-foreground text-base">{project}</h3>
+        <h3 className="font-semibold text-foreground text-base">
+          {pullRequestUrl ? (
+            <a
+              href={pullRequestUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group hover:underline inline-flex items-center gap-0.5 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+            >
+              {project}
+              <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          ) : (
+            project
+          )}
+        </h3>
         <p className="text-sm text-muted-foreground leading-relaxed mt-1">{description}</p>
       </div>
     </div>
@@ -99,6 +130,7 @@ export function ExperienceSection() {
             logo="/assets/baitai.png"
             role="Software Engineering Intern"
             period="Dec 2025 – May 2026"
+            websiteUrl="https://baitai.club"
             description={[
               "Built the Next.js/TypeScript frontend and integrated backend APIs.",
               "Implemented user authentication and session management using Firebase.",
@@ -134,11 +166,13 @@ export function ExperienceSection() {
           <OSSItem
             project="Onlook (YC W25)"
             logo="/assets/onlook.png"
+            pullRequestUrl="https://github.com/onlook-dev/onlook/pulls?q=is%3Apr+is%3Aclosed+author%3ARupak182"
             description="Added Functionalities for the desktop app based on Electron.js."
           />
           <OSSItem
             project="Brie.io"
             logo="/assets/brie.png"
+            pullRequestUrl="https://github.com/briehq/brie-extension/pulls?q=is%3Apr+is%3Aclosed+author%3ARupak182"
             description="Migrated Brie extension from using Fabric.js v5 to v6 (Refactored 10 files and updated around 3,100 lines of code for compatibility) and simplified key namings in environment variables."
           />
         </div>
@@ -162,10 +196,17 @@ export function ExperienceSection() {
             </div>
             <div className="flex flex-1 flex-col justify-center">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-foreground text-base">Juspay UI Hackathon</h3>
-                {/* <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-800">
-                  <Trophy className="mr-1 h-3.5 w-3.5 text-yellow-600" /> Qualified
-                </span> */}
+                <h3 className="font-semibold text-foreground text-base">
+                  <a
+                    href="https://github.com/Rupak182/drawer2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group hover:underline inline-flex items-center gap-0.5 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+                  >
+                    Juspay UI Hackathon
+                    <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                </h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed mt-1">
                 Qualifed for Justpay UI Hacakthon where I Built a Nested Drawer Component with the help of ShadCN with customization options.
