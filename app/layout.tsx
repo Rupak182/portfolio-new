@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { DM_Sans, Geist_Mono, Inria_Serif } from "next/font/google"
 
 import "./globals.css"
@@ -20,6 +21,49 @@ const inriaSerif = Inria_Serif({
   weight: ["300", "400", "700"],
   variable: "--font-serif",
 })
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://rupak182.me"),
+  title: {
+    default: "Rupak Goura | Developer & Builder",
+    template: "%s | Rupak Goura",
+  },
+  description: "A full-stack developer and product builder with deep experience across engineering, product strategy, and user-centric design. Check out my projects and contributions.",
+  openGraph: {
+    title: "Rupak Goura | Developer & Builder",
+    description: "A full-stack developer and product builder with deep experience across engineering, product strategy, and user-centric design. Check out my projects and contributions.",
+    url: "https://rupak182.me",
+    siteName: "Rupak Goura",
+    images: [
+      {
+        url: "/assets/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Rupak Goura | Portfolio Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rupak Goura | Developer & Builder",
+    description: "A full-stack developer and product builder with deep experience across engineering, product strategy, and user-centric design. Check out my projects and contributions.",
+    creator: "@Elnora_Hines18",
+    images: ["/assets/og.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+}
 
 export default function RootLayout({
   children,
