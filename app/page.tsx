@@ -29,7 +29,7 @@ export default function Page() {
         <ToolsSection />
       </BlurFade>
       <BlurFade delay={0.1} inView>
-        <ContactSection />1"
+        <ContactSection />
       </BlurFade>
       <BottomDock />
     </main>

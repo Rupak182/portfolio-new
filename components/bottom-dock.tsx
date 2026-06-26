@@ -15,21 +15,32 @@ import {
 export function BottomDock() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   // Avoid hydration mismatch by waiting for client-side mount
   useEffect(() => {
     setMounted(true)
+    const mediaQuery = window.matchMedia("(max-width: 640px)")
+    setIsMobile(mediaQuery.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mediaQuery.addEventListener("change", handler)
+    return () => mediaQuery.removeEventListener("change", handler)
   }, [])
 
   return (
     <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
       <div className="pointer-events-auto">
-        <Dock className="bg-white/70 dark:bg-zinc-900/70 border border-border shadow-lg px-4 rounded-full backdrop-blur-md">
+        <Dock
+          iconSize={isMobile ? 35 : 40}
+          iconMagnification={isMobile ? 35 : 60}
+          disableMagnification={isMobile}
+          className="bg-white/70 dark:bg-zinc-900/70 border border-border shadow-lg px-2.5 sm:px-4 rounded-full backdrop-blur-md gap-1.5 sm:gap-2"
+        >
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
                 <a href="#hero" aria-label="Home" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
-                  <FaHome className="h-5 w-5" />
+                  <FaHome className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
@@ -42,7 +53,7 @@ export function BottomDock() {
             <Tooltip>
               <TooltipTrigger render={
                 <a href="https://github.com/Rupak182" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
-                  <FaGithub className="h-5 w-5" />
+                  <FaGithub className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
@@ -55,7 +66,7 @@ export function BottomDock() {
             <Tooltip>
               <TooltipTrigger render={
                 <a href="https://linkedin.com/in/rupak-goura" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
-                  <FaLinkedin className="h-5 w-5" />
+                  <FaLinkedin className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
@@ -68,7 +79,7 @@ export function BottomDock() {
             <Tooltip>
               <TooltipTrigger render={
                 <a href="https://x.com/Elnora_Hines18" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
-                  <FaXTwitter className="h-5 w-5" />
+                  <FaXTwitter className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
@@ -81,7 +92,7 @@ export function BottomDock() {
             <Tooltip>
               <TooltipTrigger render={
                 <a href="mailto:rupakgoura18@gmail.com" aria-label="Mail" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
-                  <FaEnvelope className="h-5 w-5" />
+                  <FaEnvelope className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
@@ -94,7 +105,7 @@ export function BottomDock() {
             <Tooltip>
               <TooltipTrigger render={
                 <a href="https://drive.google.com/file/d/1elbb0eqSmbOqaqVSbXnXdtuP9i7ziAw4/view?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Resume" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
-                  <FaFileAlt className="h-5 w-5" />
+                  <FaFileAlt className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
@@ -111,12 +122,12 @@ export function BottomDock() {
                     <AnimatedThemeToggler
                       theme={resolvedTheme as "light" | "dark"}
                       onThemeChange={(newTheme) => setTheme(newTheme)}
-                      className="w-full h-full flex items-center justify-center outline-none [&_svg]:h-5 [&_svg]:w-5 [&_svg]:pointer-events-none"
+                      className="w-full h-full flex items-center justify-center outline-none [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-5 sm:[&_svg]:w-5 [&_svg]:pointer-events-none"
                     />
                   ) : (
                     <AnimatedThemeToggler
                       theme="dark"
-                      className="w-full h-full flex items-center justify-center outline-none [&_svg]:h-5 [&_svg]:w-5 [&_svg]:pointer-events-none"
+                      className="w-full h-full flex items-center justify-center outline-none [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-5 sm:[&_svg]:w-5 [&_svg]:pointer-events-none"
                     />
                   )}
                 </div>
