@@ -24,7 +24,7 @@ export function BottomDock() {
   return (
     <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
       <div className="pointer-events-auto">
-        <Dock className="bg-white/95 dark:bg-zinc-950/95 border border-border shadow-lg px-4 rounded-full">
+        <Dock className="bg-white/70 dark:bg-zinc-900/70 border border-border shadow-lg px-4 rounded-full backdrop-blur-md">
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
