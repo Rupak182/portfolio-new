@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   description: "Full-stack developer and product builder with experience in frontend, backend, and AI integrations.",
   openGraph: {
-    title: "Rupak Goura | Developer & Builder",
+    title: "Rupak Goura | Developer",
     description: "Full-stack developer and product builder with experience in frontend, backend, and AI integrations.",
     url: "https://rupak182.me",
     siteName: "Rupak Goura",
