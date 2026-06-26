@@ -166,7 +166,7 @@ export function ExperienceSection() {
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-foreground text-base">Juspay UI Hackathon</h3>
                 <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-800">
-                  <Trophy className="mr-1 h-3.5 w-3.5 text-yellow-600" /> Qualified
+                  {/* <Trophy className="mr-1 h-3.5 w-3.5 text-yellow-600" /> Qualified */}
                 </span>
               </div>
               <p className="text-sm text-secondary leading-relaxed mt-1">
