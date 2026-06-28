@@ -4,6 +4,7 @@ import { ProjectsSection } from "@/components/projects-section"
 import { GithubContributionsSection } from "@/components/github-contributions-section"
 import { ToolsSection } from "@/components/tools-section"
 import { ContactSection } from "@/components/contact-section"
+import { FooterSection } from "@/components/footer-section"
 import { BottomDock } from "@/components/bottom-dock"
 import { BlurFade } from "@/components/ui/blur-fade"
 
@@ -30,6 +31,9 @@ export default function Page() {
       </BlurFade>
       <BlurFade delay={0.1} inView>
         <ContactSection />
+      </BlurFade>
+      <BlurFade delay={0.1} inView>
+        <FooterSection />
       </BlurFade>
       <BottomDock />
     </main>
