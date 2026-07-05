@@ -1,4 +1,5 @@
-# Developer Portfolio 🚀
+# Portfolio 🚀
+<img width="1920" height="879" alt="Screenshot from 2026-07-05 17-55-55" src="https://github.com/user-attachments/assets/18fd45d4-79b7-4de1-b661-c495488fa2e3" />
 
 A modern, high-performance personal portfolio website built using **Next.js 16 (App Router)**, **Tailwind CSS v4**, **TypeScript**, and **MagicUI**. 
 
