@@ -39,7 +39,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="#hero" aria-label="Home" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
+                <a href="#hero" aria-label="Home" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaHome className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
@@ -52,7 +52,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="https://github.com/Rupak182" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://github.com/Rupak182" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaGithub className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
@@ -65,7 +65,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="https://linkedin.com/in/rupak-goura" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://linkedin.com/in/rupak-goura" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaLinkedin className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
@@ -78,7 +78,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="https://x.com/Elnora_Hines18" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://x.com/Elnora_Hines18" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaXTwitter className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
@@ -91,7 +91,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="mailto:rupakgoura18@gmail.com" aria-label="Mail" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
+                <a href="mailto:rupakgoura18@gmail.com" aria-label="Mail" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaEnvelope className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
@@ -104,7 +104,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="https://drive.google.com/file/d/1elbb0eqSmbOqaqVSbXnXdtuP9i7ziAw4/view?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Resume" className="flex items-center justify-center w-full h-full text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://drive.google.com/file/d/1elbb0eqSmbOqaqVSbXnXdtuP9i7ziAw4/view?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Resume" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaFileAlt className="h-4 w-4 sm:h-5 sm:w-5" />
                 </a>
               } />
@@ -117,7 +117,7 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <div className="flex items-center justify-center w-full h-full cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                <div className="absolute inset-0 flex items-center justify-center rounded-full cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
                   {mounted ? (
                     <AnimatedThemeToggler
                       theme={resolvedTheme as "light" | "dark"}
