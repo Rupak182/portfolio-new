@@ -1,0 +1,52 @@
+---
+title: Introduction to System Design
+date: 2026-07-17
+description: An introduction to what system design is and how we think about it.
+tags: ["System Design", "Introduction"]
+---
+
+**System Design** is how we plan and structure a software application so that it can try to handle real-world users, data, and traffic reliably without crashing or slowing down. 
+
+Instead of writing lines of code, we are deciding how our servers, databases, and networks will connect and talk to each other.
+
+---
+
+## 1. The Core Layers of a System
+
+Many systems we design are made of three fundamental layers:
+
+*   **The Client (Frontend):** The user interface (like a mobile app or a web browser) that initiates requests.
+*   **The Server (Backend):** The application logic that processes incoming requests, applies business rules, and interacts with other services.
+*   **The Database:** The storage layer where data is persisted (saved) and retrieved.
+
+---
+
+## 2. What We Actually Do as System Designers
+
+When we design a system, we make concrete technical decisions across two main areas:
+
+### Software & Data Flow (How the application is organized)
+*   **Communication (APIs):** Deciding how different parts of our app send messages to each other.
+*   **Data Structure:** Choosing how we organize our information in the database (like creating tables with rows and columns).
+*   **Services:** Deciding whether to build one giant program (a monolith) or break it into smaller, specialized programs (microservices).
+
+### Infrastructure & Scaling (How we run and grow the app)
+*   **Scaling:** Adding more computers (servers) when we get too much traffic, and using a load balancer to distribute the visitors evenly across them.
+*   **Caching:** Storing popular info in a fast, temporary memory slot so we don't have to keep searching the main database.
+*   **Reliability:** Preparing backup servers so if one computer crashes in the data center, another one can take over immediately without the users noticing.
+
+---
+
+## 3. How We Evaluate a System Design
+
+When we design a system, we often guide our decisions using two core concepts:
+
+### What the App Does vs. How It Performs
+Before we design anything, we generally need to know:
+*   **What it must do (Functional):** The actual features we want (for example, "users can upload photos" or "users can send messages").
+*   **How well it must do it (Non-Functional):** The performance goals (for example, "pages should load in under 1 second" or "the website should have minimal downtime").
+
+### The Art of Trade-Offs
+In system design, there is no "perfect" solution. Every choice we make has trade-offs:
+*   If we make the site **faster** by saving data in temporary memory (caching), we risk showing **outdated info** if the main database changes.
+*   If we make the site **safer** by copying data to multiple databases, we spend **more money** and make our setup more complicated.

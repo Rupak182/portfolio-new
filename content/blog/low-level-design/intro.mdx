@@ -1,0 +1,51 @@
+---
+title: Introduction to Low-Level Design
+date: 2026-07-17
+description: An introduction to what low-level design is and how we think about it.
+tags: ["Low Level Design", "Introduction"]
+---
+
+**Low-Level Design (LLD)**, also called **Object-Oriented Design (OOD)**, is how we organize and structure our actual code inside a program. 
+
+While High-Level Design (HLD) looks at the big picture (like connecting servers and databases), Low-Level Design looks at the individual files, classes, and functions to make sure they are clean, readable, and easy to change later.
+
+---
+
+## 1. The Core Pillars of Low-Level Design
+
+When we write code, we don't just dump all of it into one giant file. We often use three main principles to organize it:
+
+*   **Abstraction (Hiding Complexity):** Aiming to expose only the necessary functions while hiding the complicated internal calculations. Other parts of our program can use our code without needing to know *how* it does its job internally.
+*   **Encapsulation (Grouping & Protecting):** Putting related data and code together into self-contained packages (like classes) and blocking outside code from messing with their internals.
+*   **Loose Coupling & High Cohesion (Independence & Focus):** 
+    *   *Loose Coupling* means our code files don't rely too heavily on each other, so changing one file is less likely to break everything else.
+    *   *High Cohesion* means each file or class should have one clear, focused job instead of trying to do everything.
+
+---
+
+## 2. What We Actually Do as Low-Level Designers
+
+When we design the code structure, we focus on two main tasks:
+
+### Organizing Relationships Between Code Files
+*   **Inheritance (Is-A relationship):** Deciding if a new class should build upon an existing class (for example, a `User` class and a `PremiumUser` class that inherits from it).
+*   **Composition (Has-A relationship):** Building a class by combining other classes (for example, a `Car` class containing an `Engine` class).
+*   **Interfaces:** Specifying the functions a class should implement, ensuring different parts of our program can talk to each other smoothly.
+
+### Following Guidelines & Templates
+*   **SOLID Principles:** A set of 5 design principles that can help us design classes that are small, focused, and easy to modify without breaking other code.
+*   **Design Patterns:** Reusable templates and structures that help solve common coding problems (for example, ensuring we only create one database connection object across our entire app).
+
+---
+
+## 3. Core Guidelines & Visualizing Our Designs
+
+### Three Simple Guidelines for Clean Code
+*   **KISS (Keep It Simple, Stupid):** We aim to make our design as simple as possible, trying to avoid writing complicated code for problems we don't have yet.
+*   **DRY (Don't Repeat Yourself):** We try to avoid copy-pasting code. Every task should ideally have only one place in the code where it is defined.
+*   **YAGNI (You Aren't Gonna Need It):** We aim to build what we need today. We try to avoid writing extra features just because "we might need them in the future."
+
+### Visualizing the Design
+Before writing any code, we can draw diagrams to plan the structure:
+*   **Class Diagrams:** Diagrams that show our classes, what data they hold, and how they connect to one another.
+*   **Sequence Diagrams:** Diagrams that show the order in which different parts of our code talk to each other to complete a task.
