@@ -1,0 +1,40 @@
+---
+title: Low-Level Design
+date: 2026-07-16
+description: My learning notes and ongoing study of OOP, SOLID principles, UML, and design patterns as I learn object-oriented design.
+tags: ["Low Level Design"]
+---
+
+Low-Level Design (LLD), also known as Object-Oriented Design (OOD), is something I am actively learning right now. This page serves as my personal study guide and collection of notes where I will track my understanding of how code is structured, how classes interact, and how to apply good design patterns.
+
+> [!NOTE]
+> This post is a work-in-progress. I will keep updating it as I learn more design patterns and work on mock machine coding challenges.
+
+## SOLID Principles
+
+These are the core guidelines I'm studying to make my code more flexible and maintainable:
+
+1.  **Single Responsibility Principle (SRP)**: A class should have one, and only one, reason to change. (Keep classes focused).
+2.  **Open/Closed Principle (OCP)**: Classes should be open for extension but closed for modification.
+3.  **Liskov Substitution Principle (LSP)**: Derived classes must be completely substitutable for their base classes.
+4.  **Interface Segregation Principle (ISP)**: Avoid thick interfaces; client-specific interfaces are better than general-purpose ones.
+5.  **Dependency Inversion Principle (DIP)**: Depend on abstractions rather than concrete implementations.
+
+## Design Patterns I'm Exploring
+
+Design patterns are standard templates for solving common software architecture problems. I am learning them by category:
+
+### 1. Creational Patterns (Object Creation)
+*   **Singleton**: Ensuring a class has only one instance (e.g., database connection pool).
+*   **Factory Method**: Creating objects without specifying the exact class of object that will be created.
+*   **Builder**: Constructing complex objects step-by-step.
+
+### 2. Structural Patterns (Class/Object Composition)
+*   **Adapter**: Bridging two incompatible interfaces.
+*   **Decorator**: Adding behavior to individual objects dynamically.
+*   **Facade**: Creating a simplified interface to a complex subsystem.
+
+### 3. Behavioral Patterns (Object Interaction)
+*   **Observer**: Notifying multiple objects about state changes.
+*   **Strategy**: Swapping algorithms at runtime.
+*   **State**: Modifying object behavior when its internal state changes.

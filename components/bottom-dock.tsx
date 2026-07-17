@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { Dock, DockIcon } from "@/components/ui/dock"
-import { FaHome, FaGithub, FaLinkedin, FaEnvelope, FaFileAlt } from "react-icons/fa"
+import { FaHome, FaGithub, FaLinkedin, FaEnvelope, FaFileAlt, FaBook } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
+import Link from "next/link"
 import {
   Tooltip,
   TooltipContent,
@@ -39,12 +40,25 @@ export function BottomDock() {
           <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
             <Tooltip>
               <TooltipTrigger render={
-                <a href="#hero" aria-label="Home" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/#hero" aria-label="Home" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
                   <FaHome className="h-4 w-4 sm:h-5 sm:w-5" />
-                </a>
+                </Link>
               } />
               <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
                 Home
+              </TooltipContent>
+            </Tooltip>
+          </DockIcon>
+
+          <DockIcon className="hover:bg-muted dark:hover:bg-zinc-900 rounded-full flex items-center justify-center">
+            <Tooltip>
+              <TooltipTrigger render={
+                <Link href="/blog" aria-label="Blog" className="absolute inset-0 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors">
+                  <FaBook className="h-4 w-4 sm:h-5 sm:w-5" />
+                </Link>
+              } />
+              <TooltipContent side="top" align="center" className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium">
+                Blog
               </TooltipContent>
             </Tooltip>
           </DockIcon>
