@@ -1,0 +1,74 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 240" width="540" height="240">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e1e1e" class="arrow-head" />
+    </marker>
+    
+    <style>
+      /* Light Mode Styles (default) */
+      .state-standard { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; }
+      .text-standard { fill: #1f263a; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      
+      .state-terminal { fill: #b4d8cf; stroke: #007947; stroke-width: 2; }
+      .text-terminal { fill: #052816; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      
+      .line { stroke: #1e1e1e; stroke-width: 2; fill: none; }
+      .label-text { fill: #555555; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; }
+      
+      /* Dark Mode Overrides */
+      @media (prefers-color-scheme: dark) {
+        .state-standard { fill: #1e1b4b !important; stroke: #818cf8 !important; }
+        .text-standard { fill: #e0e7ff !important; }
+        
+        .state-terminal { fill: #022c22 !important; stroke: #34d399 !important; }
+        .text-terminal { fill: #d1fae5 !important; }
+        
+        .line { stroke: #94a3b8 !important; }
+        .arrow-head { fill: #94a3b8 !important; }
+        .label-text { fill: #94a3b8 !important; }
+      }
+    </style>
+  </defs>
+
+  <!-- States -->
+  <!-- CREATED -->
+  <rect x="20" y="30" width="100" height="50" rx="8" ry="8" class="state-standard" />
+  <text x="70" y="60" text-anchor="middle" class="text-standard">CREATED</text>
+
+  <!-- PAID -->
+  <rect x="220" y="30" width="100" height="50" rx="8" ry="8" class="state-standard" />
+  <text x="270" y="60" text-anchor="middle" class="text-standard">PAID</text>
+
+  <!-- SHIPPED -->
+  <rect x="420" y="30" width="100" height="50" rx="8" ry="8" class="state-standard" />
+  <text x="470" y="60" text-anchor="middle" class="text-standard">SHIPPED</text>
+
+  <!-- CANCELLED (Terminal) -->
+  <rect x="20" y="150" width="100" height="50" rx="8" ry="8" class="state-terminal" />
+  <text x="70" y="180" text-anchor="middle" class="text-terminal">CANCELLED</text>
+
+  <!-- DELIVERED (Terminal) -->
+  <rect x="420" y="150" width="100" height="50" rx="8" ry="8" class="state-terminal" />
+  <text x="470" y="180" text-anchor="middle" class="text-terminal">DELIVERED</text>
+
+
+  <!-- Transitions (Arrows) -->
+  <!-- CREATED -> PAID -->
+  <path d="M 120 55 L 210 55" class="line" marker-end="url(#arrow)" />
+  <text x="165" y="47" text-anchor="middle" class="label-text">pay()</text>
+
+  <!-- PAID -> SHIPPED -->
+  <path d="M 320 55 L 410 55" class="line" marker-end="url(#arrow)" />
+  <text x="365" y="47" text-anchor="middle" class="label-text">ship()</text>
+
+  <!-- SHIPPED -> DELIVERED -->
+  <path d="M 470 80 L 470 140" class="line" marker-end="url(#arrow)" />
+  <text x="490" y="115" text-anchor="middle" class="label-text">deliver()</text>
+
+  <!-- CREATED -> CANCELLED -->
+  <path d="M 70 80 L 70 140" class="line" marker-end="url(#arrow)" />
+  <text x="45" y="115" text-anchor="middle" class="label-text">cancel()</text>
+</svg>

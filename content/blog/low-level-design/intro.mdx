@@ -1,51 +1,117 @@
 ---
 title: Introduction to Low-Level Design
 date: 2026-07-17
-description: An introduction to what low-level design is and how we think about it.
+description: An introduction to what low-level design is, why it matters, OOP pillars, and core design principles.
 tags: ["Low Level Design", "Introduction"]
 ---
 
-**Low-Level Design (LLD)**, also called **Object-Oriented Design (OOD)**, is how we organize and structure our actual code inside a program. 
+When starting to build software, the first instinct is often to just write code that "works." This means writing functions, hooking them up to databases, and deploying them. But as a project grows, this approach can quickly lead to what developers call **spaghetti code**—a tangled mess where making a small change in one file unexpectedly breaks other features.
 
-While High-Level Design (HLD) looks at the big picture (like connecting servers and databases), Low-Level Design looks at the individual files, classes, and functions to make sure they are clean, readable, and easy to change later.
+This is why studying **Low-Level Design (LLD)**, also commonly referred to as **Object-Oriented Design (OOD)**, is important. 
 
----
-
-## 1. The Core Pillars of Low-Level Design
-
-When we write code, we don't just dump all of it into one giant file. We often use three main principles to organize it:
-
-*   **Abstraction (Hiding Complexity):** Aiming to expose only the necessary functions while hiding the complicated internal calculations. Other parts of our program can use our code without needing to know *how* it does its job internally.
-*   **Encapsulation (Grouping & Protecting):** Putting related data and code together into self-contained packages (like classes) and blocking outside code from messing with their internals.
-*   **Loose Coupling & High Cohesion (Independence & Focus):** 
-    *   *Loose Coupling* means our code files don't rely too heavily on each other, so changing one file is less likely to break everything else.
-    *   *High Cohesion* means each file or class should have one clear, focused job instead of trying to do everything.
+While High-Level Design (HLD) deals with the macro-architecture of a system (like databases, load balancers, and network layers), Low-Level Design focuses on the micro-architecture—the files, classes, interfaces, and methods that make up the actual codebase.
 
 ---
 
-## 2. What We Actually Do as Low-Level Designers
+## HLD vs. LLD: What is the Difference?
 
-When we design the code structure, we focus on two main tasks:
+Understanding LLD is easier when contrasting it directly with High-Level Design. It is often compared to building a house:
+*   **High-Level Design** is the blueprint showing the layout of the rooms, the plumbing network, and where the electrical mains enter the house.
+*   **Low-Level Design** is the detailed specification of the cabinets, the materials used for the pipes, and how the doors hinge and swing open.
 
-### Organizing Relationships Between Code Files
-*   **Inheritance (Is-A relationship):** Deciding if a new class should build upon an existing class (for example, a `User` class and a `PremiumUser` class that inherits from it).
-*   **Composition (Has-A relationship):** Building a class by combining other classes (for example, a `Car` class containing an `Engine` class).
-*   **Interfaces:** Specifying the functions a class should implement, ensuring different parts of our program can talk to each other smoothly.
+Here is a quick breakdown of how they compare in software:
 
-### Following Guidelines & Templates
-*   **SOLID Principles:** A set of 5 design principles that can help us design classes that are small, focused, and easy to modify without breaking other code.
-*   **Design Patterns:** Reusable templates and structures that help solve common coding problems (for example, ensuring we only create one database connection object across our entire app).
+| Feature | High-Level Design (HLD) | Low-Level Design (LLD) |
+| :--- | :--- | :--- |
+| **Primary Focus** | System Architecture & Infrastructure | Code Structure & Object Relationships |
+| **Scope of Design** | The entire system (servers, databases, network boundaries) | A single service, module, or package boundary |
+| **Core Components** | Load Balancers, Databases, CDNs, Queues, etc. | Classes, Interfaces, Methods, Design Patterns, etc. |
+| **Key Questions** | • *How to scale and distribute system traffic?*<br />• *Where is data stored and partitioned?* | • *How to organize code into classes and interfaces?*<br />• *How to make classes extensible and easy to test?* |
+| **Main Risks Addressed** | System crashes, data loss, high latency, single points of failure | Rigid code (hard to modify), high technical debt, regression bugs |
+| **Common Diagrams** | System Architecture, Network Topology | Class Diagrams, Sequence Diagrams |
+
+<img src="/assets/hld_vs_lld.svg" alt="High-Level Design vs. Low-Level Design" className="mx-auto my-8 w-full max-w-[800px]" />
 
 ---
 
-## 3. Core Guidelines & Visualizing Our Designs
+## 1. The Four Pillars of Object-Oriented Design (OOD)
 
-### Three Simple Guidelines for Clean Code
-*   **KISS (Keep It Simple, Stupid):** We aim to make our design as simple as possible, trying to avoid writing complicated code for problems we don't have yet.
-*   **DRY (Don't Repeat Yourself):** We try to avoid copy-pasting code. Every task should ideally have only one place in the code where it is defined.
-*   **YAGNI (You Aren't Gonna Need It):** We aim to build what we need today. We try to avoid writing extra features just because "we might need them in the future."
+Most modern low-level design is built on Object-Oriented programming paradigms. Structuring code begins with these four classic pillars:
 
-### Visualizing the Design
-Before writing any code, we can draw diagrams to plan the structure:
-*   **Class Diagrams:** Diagrams that show our classes, what data they hold, and how they connect to one another.
-*   **Sequence Diagrams:** Diagrams that show the order in which different parts of our code talk to each other to complete a task.
+### A. Encapsulation (Protecting State)
+Encapsulation is the practice of bundling data (state) and the methods that operate on that data into a single unit (a class), while restricting direct access to some of the object's components.
+*   **Analogy:** A vending machine. A user cannot reach inside and grab a soda directly. Instead, interaction happens through a public interface (pressing buttons and inserting coins). The machine validates the request internally and dispenses the drink safely.
+*   **Why it matters:** It prevents external code from putting an object into an invalid state. For example, a `BankAccount` class should not allow external code to directly modify a `balance` variable; it must go through `deposit()` or `withdraw()` methods that enforce validation rules.
+
+### B. Abstraction (Hiding Complexity)
+Abstraction means exposing only the essential features of an object while hiding the underlying implementation details.
+*   **Analogy:** Driving a car. To speed up, the driver presses the gas pedal. There is no need to understand combustion chambers, fuel injection, or gear ratios to drive. The pedal serves as the abstraction layer.
+*   **Why it matters:** It reduces cognitive load. Developers can use a library or a class by simply reading its public methods without needing to audit hundreds of lines of internal helper code.
+
+### C. Inheritance (Code Reusability)
+Inheritance allows a new class (subclass) to adopt the properties and behaviors of an existing class (superclass), representing an **"Is-A"** relationship.
+*   **Analogy:** A generic `User` class contains basic fields like `id` and `email`. A `PremiumUser` class inherits from `User` but adds custom attributes like `subscriptionExpiry`.
+*   **Why it matters:** It reduces duplicate code. However, inheritance is often used cautiously, as deep hierarchies can make code rigid and hard to modify.
+
+### D. Polymorphism (Flexibility)
+Polymorphism (meaning "many forms") is the ability of a single entity — such as a method, operator, or object — to take on multiple forms or behaviors depending on the context in which it is used. In Object-Oriented Design, this is commonly seen as **Subtype Polymorphism**, where different classes share a common interface or parent class but each respond to the same method call in their own unique way.
+*   **Analogy:** A universal "Play" button on a media player. The player doesn't care whether the source is an audio MP3 file, a video MP4 file, or a live stream. It just calls `.play()` on the media object, and each media type handles the playback differently.
+*   **Why it matters:** This allows writing code that interacts with interfaces rather than concrete classes, making the program highly extensible.
+
+---
+
+## 2. Core Metrics: Coupling and Cohesion
+
+In low-level design, these two design metrics are critical. They determine whether a codebase remains maintainable or becomes difficult to manage.
+
+<img src="/assets/cohesion_coupling.svg" alt="High Cohesion and Loose Coupling" className="mx-auto my-8 w-full max-w-[600px]" />
+
+### Loose Coupling (Independence)
+Coupling refers to how dependent different classes or modules are on one another. **The goal is always to aim for loose coupling.**
+*   If Class A is tightly coupled to Class B, any change to Class B will force modifications in Class A as well.
+*   **Example:** If backend code directly instantiates a `PostgreSQLConnection` inside a controller, it is tightly coupled to PostgreSQL. Switching to MongoDB would require rewriting the controller. Depending instead on a generic `DatabaseConnection` interface keeps the codebase loosely coupled, allowing database implementations to be swapped easily.
+
+### High Cohesion (Focus)
+Cohesion refers to how focused and closely related the responsibilities inside a single class or module are. **The goal is always to aim for high cohesion.**
+*   A class with low cohesion tries to do too many unrelated things.
+*   **Example:** A `BillingSystem` class that calculates invoices, formats HTML receipts, connects to the database, and sends notification emails has low cohesion. It is a "god object." A highly cohesive design splits these duties into specialized classes: `InvoiceCalculator`, `ReceiptFormatter`, `BillingRepository`, and `EmailService`.
+
+---
+
+## 3. The Low-Level Designer's Toolkit
+
+Translating these design principles into clean, real-world code typically relies on three main tools:
+
+### A. SOLID Principles
+SOLID is an acronym for five design principles that help make software designs more understandable, flexible, and maintainable:
+1.  **Single Responsibility Principle (SRP):** A class should have one, and only one, reason to change.
+2.  **Open/Closed Principle (OCP):** Software entities should be open for extension, but closed for modification.
+3.  **Liskov Substitution Principle (LSP):** Objects of a parent class should be replaceable with objects of its subclasses without altering the correctness of the program (meaning subclasses must honor the contract of their parent class).
+4.  **Interface Segregation Principle (ISP):** It is better to have many small, specific interfaces than one large, general-purpose interface.
+5.  **Dependency Inversion Principle (DIP):** Depend on abstractions (interfaces) rather than concrete implementations.
+
+> [!NOTE]
+> The plan is to deep dive into each of the SOLID principles with clean code examples in the next post of this series.
+
+### B. Design Patterns
+Design patterns are reusable templates that solve common, recurring problems in software design. Instead of reinventing the wheel, the approach is to use these established blueprints. They are generally categorized into three groups:
+*   **Creational Patterns:** Focus on object creation mechanisms (e.g., *Singleton*, *Factory*, *Builder*).
+*   **Structural Patterns:** Focus on how classes and objects compose to form larger structures (e.g., *Adapter*, *Decorator*, *Facade*).
+*   **Behavioral Patterns:** Focus on communication and responsibility assignment between objects (e.g., *Observer*, *Strategy*, *State*).
+
+### C. UML Diagrams (Unified Modeling Language)
+Before writing code, drawing diagrams helps map out the structural plan:
+*   **Class Diagrams:** Show the static structure of the system, including classes, attributes, methods, and relationships (like inheritance or composition).
+*   **Sequence Diagrams:** Show the dynamic flow of control—how objects interact step-by-step over time to complete a specific task.
+
+---
+
+## 4. Practical Rules of Thumb
+
+While design principles are powerful, they are best applied pragmatically. Applying these three classic software engineering principles helps avoid over-engineering:
+
+*   **KISS (Keep It Simple, Stupid):** This means avoiding complex, nested code when a simple class or function will do. Simple code is easier to debug and maintain.
+*   **DRY (Don't Repeat Yourself):** This means avoiding copy-pasting code blocks. If the same logic appears in multiple places, extracting it into a reusable helper class or method is ideal.
+*   **YAGNI (You Aren't Gonna Need It):** This means avoiding designing features or writing code for hypothetical future requirements. Building only what is needed today, while designing it flexibly enough to be extended tomorrow.
+
+---

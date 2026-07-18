@@ -1,0 +1,12 @@
+{
+  "title": "Core Concepts",
+  "pages": [
+    "classes-and-objects",
+    "enums",
+    "interfaces",
+    "encapsulation",
+    "abstraction",
+    "inheritance",
+    "polymorphism"
+  ]
+}

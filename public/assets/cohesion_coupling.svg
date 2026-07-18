@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="100%">
+  <style>
+    /* Default (Light Mode) */
+    .bg { fill: none; }
+    .label-text { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; text-anchor: middle; }
+    .type-text { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: #64748b; text-anchor: middle; }
+    .annotation-text { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; fill: #475569; text-anchor: middle; }
+    
+    .c-primary { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; rx: 6px; }
+    .c-primary-text { fill: #1f263a; }
+    
+    .c-secondary { fill: #d3daea; stroke: #0274a7; stroke-width: 2; rx: 6px; }
+    .c-secondary-text { fill: #12222c; }
+
+    .c-tertiary { fill: #b4d8cf; stroke: #007947; stroke-width: 2; rx: 6px; }
+    .c-tertiary-text { fill: #052816; }
+    
+    .arrow-line { stroke: #1e1e1e; stroke-width: 2; fill: none; }
+    .arrow-line-dashed { stroke: #1e1e1e; stroke-width: 2; stroke-dasharray: 4 4; fill: none; }
+    .arrow-head { fill: #1e1e1e; }
+    .arrow-head-hollow { fill: #ffffff; stroke: #1e1e1e; stroke-width: 2; }
+    
+    /* Dark Mode Override */
+    @media (prefers-color-scheme: dark) {
+      .annotation-text { fill: #94a3b8; }
+      .type-text { fill: #94a3b8; }
+      
+      .c-primary { fill: #1e1b4b; stroke: #818cf8; }
+      .c-primary-text { fill: #e0e7ff; }
+      
+      .c-secondary { fill: #0f172a; stroke: #38bdf8; }
+      .c-secondary-text { fill: #e0f2fe; }
+
+      .c-tertiary { fill: #022c22; stroke: #34d399; }
+      .c-tertiary-text { fill: #d1fae5; }
+      
+      .arrow-line { stroke: #94a3b8; }
+      .arrow-line-dashed { stroke: #94a3b8; }
+      .arrow-head { fill: #94a3b8; }
+      .arrow-head-hollow { fill: #1e1e1e; stroke: #94a3b8; }
+    }
+  </style>
+  
+  <defs>
+    <!-- Solid arrowhead for dependency -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" class="arrow-head" />
+    </marker>
+    <!-- Hollow arrowhead for inheritance/realization -->
+    <marker id="arrow-hollow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 Z" class="arrow-head-hollow" />
+    </marker>
+  </defs>
+
+  <!-- PaymentService Box -->
+  <g>
+    <rect x="30" y="95" width="140" height="50" class="c-primary" />
+    <text x="100" y="117" class="type-text c-primary-text">&lt;&lt;class&gt;&gt;</text>
+    <text x="100" y="132" class="label-text c-primary-text">PaymentService</text>
+  </g>
+
+  <!-- Dependency Arrow (Service -> Interface) -->
+  <g>
+    <line x1="170" y1="120" x2="222" y2="120" class="arrow-line" marker-end="url(#arrow)" />
+    <text x="196" y="110" class="annotation-text">uses</text>
+  </g>
+
+  <!-- IPaymentGateway Interface Box -->
+  <g>
+    <rect x="230" y="95" width="140" height="50" class="c-secondary" />
+    <text x="300" y="117" class="type-text c-secondary-text">&lt;&lt;interface&gt;&gt;</text>
+    <text x="300" y="132" class="label-text c-secondary-text">IPaymentGateway</text>
+  </g>
+
+  <!-- Realization Connectors (Concrete Gateways -> Interface) -->
+  <!-- We draw lines from the concrete gateways to the interface with hollow arrowheads -->
+  <g>
+    <!-- StripeGateway Box -->
+    <rect x="440" y="45" width="130" height="50" class="c-tertiary" />
+    <text x="505" y="67" class="type-text c-tertiary-text">&lt;&lt;class&gt;&gt;</text>
+    <text x="505" y="82" class="label-text c-tertiary-text">StripeGateway</text>
+
+    <!-- PayPalGateway Box -->
+    <rect x="440" y="145" width="130" height="50" class="c-tertiary" />
+    <text x="505" y="167" class="type-text c-tertiary-text">&lt;&lt;class&gt;&gt;</text>
+    <text x="505" y="182" class="label-text c-tertiary-text">PayPalGateway</text>
+
+    <!-- Dashed realization lines pointing to IPaymentGateway -->
+    <!-- From Stripe to split-point -->
+    <path d="M 440,70 L 410,70 L 410,120 L 378,120" class="arrow-line-dashed" marker-end="url(#arrow-hollow)" />
+    <!-- From PayPal to split-point -->
+    <path d="M 440,170 L 410,170 L 410,120" class="arrow-line-dashed" />
+    
+    <text x="410" y="110" class="annotation-text" style="text-anchor: end;">implements</text>
+  </g>
+</svg>

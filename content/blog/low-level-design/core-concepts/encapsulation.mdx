@@ -1,0 +1,109 @@
+---
+title: Encapsulation
+date: 2026-07-18
+description: Encapsulation in Low-Level Design, covering data hiding, access control, and the "Tell, Don't Ask" design principle.
+tags: ["Low Level Design", "OOP"]
+---
+
+In object-oriented system design, **Encapsulation** is the practice of bundling data (state) and the methods that operate on that data (behavior) into a single unit (a class), while restricting direct access to some of the object's components.
+
+Encapsulation is not just about making fields `private` and writing getters and setters. It is about protecting object integrity and controlling how state is modified.
+
+This article covers how encapsulation protects domain models and explores the **Tell, Don't Ask** design guideline.
+
+---
+
+## The Encapsulation Barrier
+
+Encapsulation creates a protective barrier around an object's state. The outside world can only interact with the object through its public interface (methods), while the internal fields remain hidden.
+
+<img src="/assets/encapsulation.svg" alt="Encapsulation Barrier Diagram" className="mx-auto my-8 w-full max-w-[500px]" />
+
+This design choice provides two key benefits:
+1. **Validation & Integrity:** The class can enforce rules on how its data changes, preventing it from entering an invalid state (e.g., a negative bank account balance).
+2. **Flexibility to Change:** We can change the internal data structures of a class without modifying the external classes that use it.
+
+---
+
+## Code Example: Protecting State
+
+### The Anti-Pattern: Public Access
+If fields are public, any external code can modify them arbitrarily, bypassing business rules:
+
+```java
+public class BankAccount {
+    public double balance; // Exposed!
+}
+
+// Client usage:
+BankAccount account = new BankAccount();
+account.balance = -500.00; // Invalid state allowed!
+```
+
+### The LLD Pattern: Encapsulated State
+By making fields private and exposing controlled methods, we protect the object's integrity:
+
+```java
+public class BankAccount {
+    private double balance; // Hidden state
+
+    public double getBalance() {
+        return this.balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive.");
+        }
+        this.balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive.");
+        }
+        if (amount > this.balance) {
+            throw new IllegalStateException("Insufficient funds.");
+        }
+        this.balance -= amount;
+    }
+}
+```
+
+> [!WARNING]
+> **Getters and Setters are not a Silver Bullet**
+> Automatically generating getters and setters for every private field is a common mistake. If a setter allows anyone to change a field to any value, it breaks encapsulation. 
+> *   Only expose getters and setters when absolutely necessary.
+> *   Prefer exposing business-focused methods (e.g., `deposit()`) over raw setters (e.g., `setBalance()`).
+
+---
+
+## The "Tell, Don't Ask" Guideline
+
+A core guideline of encapsulation in LLD is **Tell, Don't Ask**. 
+
+Instead of asking an object about its internal state, making a decision, and then updating the object's state from the outside, we should simply **tell** the object what action to perform. This keeps the behavior encapsulated where the data lives.
+
+### Anti-Pattern (Asking):
+```java
+// Client asks for the wallet balance, makes a decision, and updates it
+if (wallet.getBalance() >= itemPrice) {
+    wallet.setBalance(wallet.getBalance() - itemPrice);
+}
+```
+
+### Pattern (Telling):
+```java
+// Client tells the wallet what to do
+wallet.deduct(itemPrice); 
+```
+
+By delegating the logic to the `Wallet` class, we prevent business rules (like checking for sufficient funds) from leaking into external classes.
+
+---
+
+## Summary
+
+*   **Encapsulation:** Bundles state and behavior together, hiding internal details.
+*   **Data Integrity:** Restricting direct access ensures objects can validate changes and maintain valid states.
+*   **Tell, Don't Ask:** Keep logic next to the data it operates on by telling objects what to do rather than asking for their state.

@@ -1,0 +1,125 @@
+---
+title: Interfaces
+date: 2026-07-18
+description: Interfaces in Low-Level Design, exploring decoupling, coding to an interface, and the difference between interfaces and abstract classes.
+tags: ["Low Level Design", "OOP"]
+---
+
+In object-oriented system design, we often need to define how different components interact without locking ourselves into specific implementations. 
+
+An **Interface** acts as a contract. It defines a set of behaviors (methods) that a class agrees to provide, without specifying *how* those behaviors are implemented.
+
+This article covers why interfaces are essential for loose coupling, how they enable polymorphism, and how they differ from abstract classes.
+
+---
+
+## Coding to an Interface
+
+A core design guideline in low-level design is: **Code to an interface, not an implementation.**
+
+When a class depends directly on another concrete class, they are **tightly coupled**. If we want to change or swap that dependency later, we have to modify the calling class, violating the Open-Closed Principle.
+
+### The Anti-Pattern: Tight Coupling
+Here, our `NotificationService` depends directly on a concrete `EmailSender`:
+
+```java
+// Concrete dependency
+public class EmailSender {
+    public void send(String message) {
+        System.out.println("Sending email: " + message);
+    }
+}
+
+public class NotificationService {
+    private EmailSender sender = new EmailSender(); // Tightly coupled!
+
+    public void notifyUser(String message) {
+        sender.send(message);
+    }
+}
+```
+If we want to start sending SMS notifications instead of emails, we have to change the code inside `NotificationService`.
+
+---
+
+### The LLD Pattern: Loose Coupling
+By introducing an interface, we break the direct dependency between the calling service and the sender logic.
+
+<img src="/assets/interfaces.svg" alt="Loose Coupling with Interfaces" className="mx-auto my-8 w-full max-w-[600px]" />
+
+> [!TIP]
+> **Reading the UML Notation:**
+> *   **Solid Line + Solid Arrowhead (Dependency):** Indicates that one class uses or depends on another (e.g., `NotificationService` depends on `MessageSender`).
+> *   **Dashed Line + Hollow Triangle (Realization/Implementation):** Indicates that a class implements an interface contract (e.g., `EmailSender` implements `MessageSender`).
+
+```java
+// 1. Define the interface contract
+public interface MessageSender {
+    void send(String message);
+}
+
+// 2. Implement the contract
+public class EmailSender implements MessageSender {
+    @Override
+    public void send(String message) {
+        System.out.println("Sending email: " + message);
+    }
+}
+
+public class SmsSender implements MessageSender {
+    @Override
+    public void send(String message) {
+        System.out.println("Sending SMS: " + message);
+    }
+}
+
+// 3. Depend on the interface
+public class NotificationService {
+    private final MessageSender sender;
+
+    // Dependency is injected at runtime
+    public NotificationService(MessageSender sender) {
+        this.sender = sender;
+    }
+
+    public void notifyUser(String message) {
+        sender.send(message);
+    }
+}
+```
+
+```java
+// Client usage:
+NotificationService emailService = new NotificationService(new EmailSender());
+emailService.notifyUser("Hello via Email!");
+
+NotificationService smsService = new NotificationService(new SmsSender());
+smsService.notifyUser("Hello via SMS!");
+```
+
+Now, `NotificationService` is completely decoupled. We can pass either `EmailSender` or `SmsSender` into its constructor without changing a single line of code inside `NotificationService`.
+
+---
+
+## Interface vs. Abstract Class
+
+A common design question is when to use an interface versus an abstract class. The distinction is about intent:
+
+| Feature | Interface | Abstract Class |
+| :--- | :--- | :--- |
+| **Relationship** | Defines capability (**"can-do"**). E.g., `Serializable`, `Runnable`. | Defines identity (**"is-a"**). E.g., `Animal` -> `Dog`. |
+| **Multiple Inheritance** | A class can implement **multiple** interfaces. | A class can extend only **one** abstract class. |
+| **State (Fields)** | Cannot hold mutable instance state (only static final constants). | Can hold both mutable instance state (instance fields) and constants. |
+| **Constructors** | Cannot have constructors. | Can have constructors (to initialize base state). |
+
+### Design Guideline:
+*   Use **Abstract Classes** when you want to share common state and code layout among closely related subclasses.
+*   Use **Interfaces** when you want to define a common behavior contract across completely unrelated classes (e.g., both a `User` class and a `DatabaseBackup` class can implement `Serializable`).
+
+---
+
+## Summary
+
+*   **Contract:** Interfaces define behavior contracts without enforcing implementation details.
+*   **Loose Coupling:** Depending on interfaces instead of concrete classes allows dependencies to be swapped easily.
+*   **Interface vs. Abstract Class:** Interfaces specify capabilities ("can-do"); abstract classes specify taxonomic relationships ("is-a") with shared state.

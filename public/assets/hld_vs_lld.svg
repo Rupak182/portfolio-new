@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="100%" height="100%">
+  <style>
+    /* Default (Light Mode) */
+    .bg { fill: none; }
+    .title-text { font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; fill: #1e293b; }
+    .label-text { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; text-anchor: middle; }
+    .desc-text { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; fill: #475569; }
+    
+    .hld-box { fill: #d3daea; stroke: #0274a7; stroke-width: 2; rx: 6px; }
+    .hld-text { fill: #12222c; }
+    
+    .lld-box { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; rx: 6px; }
+    .lld-text { fill: #1f263a; }
+    
+    .arrow-line { stroke: #1e1e1e; stroke-width: 2; fill: none; }
+    .arrow-line-dashed { stroke: #1e1e1e; stroke-width: 2; stroke-dasharray: 5 4; fill: none; }
+    .arrow-head { fill: #1e1e1e; }
+    .arrow-head-open { fill: none; stroke: #1e1e1e; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    
+    .border-box { stroke: #d3d3d3; stroke-width: 1.5; stroke-dasharray: 6 4; fill: none; rx: 8px; }
+    .section-title { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; fill: #64748b; letter-spacing: 0.05em; }
+
+    /* Dark Mode Override */
+    @media (prefers-color-scheme: dark) {
+      .title-text { fill: #f8fafc; }
+      .desc-text { fill: #94a3b8; }
+      
+      .hld-box { fill: #0f172a; stroke: #38bdf8; }
+      .hld-text { fill: #e0f2fe; }
+      
+      .lld-box { fill: #1e1b4b; stroke: #818cf8; }
+      .lld-text { fill: #e0e7ff; }
+      
+      .arrow-line { stroke: #94a3b8; }
+      .arrow-line-dashed { stroke: #94a3b8; }
+      .arrow-head { fill: #94a3b8; }
+      .arrow-head-open { stroke: #94a3b8; }
+      
+      .border-box { stroke: #52525b; }
+      .section-title { fill: #94a3b8; }
+    }
+  </style>
+  
+  <defs>
+    <!-- Solid arrowhead for HLD network flow -->
+    <marker id="arrow-solid" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" class="arrow-head" />
+    </marker>
+    <!-- Open arrowhead for standard UML dependency/association -->
+    <marker id="arrow-open" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 2 2 L 7 5 L 2 8" class="arrow-head-open" />
+    </marker>
+  </defs>
+
+  <!-- Left Side: HLD -->
+  <g transform="translate(0, 0)">
+    <text x="20" y="30" class="title-text">High-Level Design (HLD)</text>
+    <text x="20" y="52" class="desc-text">Focuses on system architecture, servers, and data flow.</text>
+    
+    <rect x="20" y="80" width="350" height="230" class="border-box" />
+    <text x="35" y="102" class="section-title">THE NETWORK SYSTEM</text>
+
+    <!-- Client -->
+    <rect x="40" y="170" width="80" height="50" class="hld-box" />
+    <text x="80" y="200" class="label-text hld-text">Client</text>
+
+    <!-- App Server -->
+    <rect x="155" y="170" width="90" height="50" class="hld-box" />
+    <text x="200" y="200" class="label-text hld-text">App Server</text>
+
+    <!-- Database -->
+    <rect x="280" y="170" width="80" height="50" class="hld-box" />
+    <text x="320" y="200" class="label-text hld-text">Database</text>
+
+    <!-- Connectors (Solid lines with solid arrowheads showing network flow) -->
+    <line x1="120" y1="195" x2="147" y2="195" class="arrow-line" marker-end="url(#arrow-solid)" />
+    <line x1="245" y1="195" x2="272" y2="195" class="arrow-line" marker-end="url(#arrow-solid)" />
+  </g>
+
+  <!-- Right Side: LLD -->
+  <g transform="translate(410, 0)">
+    <text x="20" y="30" class="title-text">Low-Level Design (LLD)</text>
+    <text x="20" y="52" class="desc-text">Focuses on class structures, patterns, and code relationships.</text>
+    
+    <rect x="20" y="80" width="350" height="230" class="border-box" />
+    <text x="35" y="102" class="section-title">INSIDE THE APP SERVER</text>
+
+    <!-- UserController -->
+    <rect x="40" y="130" width="120" height="40" class="lld-box" />
+    <text x="100" y="154" class="label-text lld-text">UserController</text>
+
+    <!-- UserService -->
+    <rect x="40" y="230" width="120" height="40" class="lld-box" />
+    <text x="100" y="254" class="label-text lld-text">UserService</text>
+
+    <!-- UserDTO -->
+    <rect x="210" y="130" width="120" height="40" class="lld-box" />
+    <text x="270" y="154" class="label-text lld-text">UserDTO</text>
+
+    <!-- UserRepository -->
+    <rect x="210" y="230" width="120" height="40" class="lld-box" />
+    <text x="270" y="254" class="label-text lld-text">UserRepository</text>
+
+    <!-- Connectors (Standard UML Class diagram style) -->
+    <!-- Controller -> DTO (Dashed line with open arrowhead for dependency) -->
+    <line x1="160" y1="150" x2="202" y2="150" class="arrow-line-dashed" marker-end="url(#arrow-open)" />
+    <!-- Controller -> Service (Solid line with open arrowhead for association) -->
+    <line x1="100" y1="170" x2="100" y2="222" class="arrow-line" marker-end="url(#arrow-open)" />
+    <!-- Service -> Repository (Solid line with open arrowhead for association) -->
+    <line x1="160" y1="250" x2="202" y2="250" class="arrow-line" marker-end="url(#arrow-open)" />
+  </g>
+</svg>

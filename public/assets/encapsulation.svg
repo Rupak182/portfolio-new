@@ -1,0 +1,84 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 240" width="500" height="240">
+  <defs>
+    <style>
+      /* Light Mode Styles (default) */
+      .client-box { fill: #f3f4f6; stroke: #9ca3af; stroke-width: 2; }
+      .client-text { fill: #374151; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      
+      .outer-shell { fill: #d3daea; stroke: #0274a7; stroke-width: 2; }
+      .outer-text { fill: #12222c; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      
+      .inner-core { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; }
+      .inner-text { fill: #1f263a; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      .inner-subtext { fill: #1f263a; font-family: 'Inter', sans-serif; font-size: 12px; font-style: italic; }
+      
+      .line-allowed { stroke: #007947; stroke-width: 2; fill: none; }
+      .arrow-allowed { fill: #007947; }
+      
+      .line-blocked { stroke: #d92626; stroke-width: 2; stroke-dasharray: 4,3; fill: none; }
+      .arrow-blocked { fill: #d92626; }
+      .cross-mark { stroke: #d92626; stroke-width: 3; stroke-linecap: round; }
+      
+      .label-allowed { fill: #007947; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; }
+      .label-blocked { fill: #d92626; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; }
+      .shell-label { fill: #0274a7; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; }
+      
+      /* Dark Mode Overrides */
+      @media (prefers-color-scheme: dark) {
+        .client-box { fill: #1f2937 !important; stroke: #4b5563 !important; }
+        .client-text { fill: #d1d5db !important; }
+        
+        .outer-shell { fill: #0f172a !important; stroke: #38bdf8 !important; }
+        .outer-text { fill: #e0f2fe !important; }
+        .shell-label { fill: #38bdf8 !important; }
+        
+        .inner-core { fill: #1e1b4b !important; stroke: #818cf8 !important; }
+        .inner-text { fill: #e0e7ff !important; }
+        .inner-subtext { fill: #a5b4fc !important; }
+        
+        .line-allowed { stroke: #34d399 !important; }
+        .arrow-allowed { fill: #34d399 !important; }
+        .label-allowed { fill: #34d399 !important; }
+        
+        .line-blocked { stroke: #f87171 !important; }
+        .arrow-blocked { fill: #f87171 !important; }
+        .cross-mark { stroke: #f87171 !important; }
+        .label-blocked { fill: #f87171 !important; }
+      }
+    </style>
+  </defs>
+
+  <!-- Client Box -->
+  <rect x="20" y="90" width="110" height="60" rx="8" ry="8" class="client-box" />
+  <text x="75" y="125" text-anchor="middle" class="client-text">Client Code</text>
+
+  <!-- Outer Capsule (Public Shell / Class Boundary) -->
+  <rect x="230" y="30" width="250" height="185" rx="20" ry="20" class="outer-shell" />
+  <text x="355" y="55" text-anchor="middle" class="outer-text">BankAccount Class</text>
+  <text x="355" y="75" text-anchor="middle" class="shell-label">Public API (Methods)</text>
+  
+  <!-- Public methods positioned side-by-side above the inner core -->
+  <text x="290" y="105" text-anchor="middle" class="outer-text">deposit()</text>
+  <text x="410" y="105" text-anchor="middle" class="outer-text">withdraw()</text>
+
+  <!-- Inner Capsule (Private Core / State) -->
+  <rect x="250" y="125" width="210" height="75" rx="10" ry="10" class="inner-core" />
+  <text x="355" y="155" text-anchor="middle" class="inner-text">Private State</text>
+  <text x="355" y="178" text-anchor="middle" class="inner-subtext">double balance</text>
+
+  <!-- Allowed Access Path (deposit) -->
+  <path d="M 130 105 L 220 105" class="line-allowed" />
+  <polygon points="230,105 220,100 220,110" class="arrow-allowed" />
+  <text x="175" y="95" text-anchor="middle" class="label-allowed">deposit(100)</text>
+
+  <!-- Blocked Access Path (direct field access) -->
+  <path d="M 130 160 L 240 160" class="line-blocked" />
+  <polygon points="250,160 240,155 240,165" class="arrow-blocked" />
+  <text x="180" y="185" text-anchor="middle" class="label-blocked">balance = -500</text>
+
+  <!-- Red Cross (Blocked representation) -->
+  <line x1="175" y1="150" x2="185" y2="170" class="cross-mark" />
+  <line x1="185" y1="150" x2="175" y2="170" class="cross-mark" />
+</svg>

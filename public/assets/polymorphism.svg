@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 170" width="500" height="170">
+  <defs>
+    <style>
+      /* Light Mode Styles (default) */
+      .box-ref { fill: #d3daea; stroke: #0274a7; stroke-width: 2; }
+      .box-obj { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; }
+      .box-vtable { fill: #b4d8cf; stroke: #007947; stroke-width: 2; }
+      
+      .text-title { fill: #111111; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; }
+      .text-type { fill: #1f263a; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; }
+      .text-meta { fill: #555555; font-family: 'Inter', sans-serif; font-size: 10px; }
+      .text-method { fill: #333333; font-family: 'Inter', sans-serif; font-size: 10px; font-style: italic; }
+      .text-action { fill: #007947; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; }
+      
+      .line { stroke: #1e1e1e; stroke-width: 2; fill: none; }
+      .arrow-solid { fill: #1e1e1e; }
+      
+      /* Dark Mode Overrides */
+      @media (prefers-color-scheme: dark) {
+        .box-ref { fill: #0f172a !important; stroke: #38bdf8 !important; }
+        .box-obj { fill: #1e1b4b !important; stroke: #818cf8 !important; }
+        .box-vtable { fill: #022c22 !important; stroke: #34d399 !important; }
+        
+        .text-title { fill: #f8fafc !important; }
+        .text-type { fill: #e0e7ff !important; }
+        .text-meta { fill: #94a3b8 !important; }
+        .text-method { fill: #cbd5e1 !important; }
+        .text-action { fill: #34d399 !important; }
+        
+        .line { stroke: #94a3b8 !important; }
+        .arrow-solid { fill: #94a3b8 !important; }
+      }
+    </style>
+  </defs>
+
+  <!-- Reference Box (Left) -->
+  <rect x="15" y="25" width="140" height="120" rx="6" ry="6" class="box-ref" />
+  <text x="85" y="52" text-anchor="middle" class="text-title">Reference Variable</text>
+  <text x="85" y="75" text-anchor="middle" class="text-meta">(Compile-Time Type)</text>
+  <text x="85" y="98" text-anchor="middle" class="text-type">PaymentProcessor</text>
+
+  <!-- Connection: Reference -> Object -->
+  <line x1="155" y1="85" x2="170" y2="85" class="line" />
+  <polygon points="180,85 170,80 170,90" class="arrow-solid" />
+
+  <!-- Object Box (Middle) -->
+  <rect x="180" y="25" width="140" height="120" rx="6" ry="6" class="box-obj" />
+  <text x="250" y="52" text-anchor="middle" class="text-title">Heap Object</text>
+  <text x="250" y="75" text-anchor="middle" class="text-meta">(Runtime Type)</text>
+  <text x="250" y="98" text-anchor="middle" class="text-type">CreditCardProcessor</text>
+
+  <!-- Connection: Object -> VTable -->
+  <line x1="320" y1="85" x2="335" y2="85" class="line" />
+  <polygon points="345,85 335,80 335,90" class="arrow-solid" />
+
+  <!-- Method Resolution Box (Right) -->
+  <rect x="345" y="25" width="140" height="120" rx="6" ry="6" class="box-vtable" />
+  <text x="415" y="52" text-anchor="middle" class="text-title">Method Resolution</text>
+  <text x="415" y="75" text-anchor="middle" class="text-meta">process() resolves to:</text>
+  <text x="415" y="98" text-anchor="middle" class="text-type">CreditCardProcessor</text>
+  <text x="415" y="118" text-anchor="middle" class="text-type">.process()</text>
+</svg>

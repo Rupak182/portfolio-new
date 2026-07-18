@@ -1,0 +1,158 @@
+---
+title: Inheritance
+date: 2026-07-18
+description: Inheritance in Low-Level Design, exploring code reuse, the Diamond Problem, and the composition vs. inheritance trade-off.
+tags: ["Low Level Design", "OOP"]
+---
+
+**Inheritance** is a mechanism in object-oriented programming that allows a class (subclass/child) to inherit state (fields) and behavior (methods) from another class (superclass/parent).
+
+It models an **IS-A** relationship (e.g., a `CheckingAccount` **IS-A** `BankAccount`).
+
+---
+
+## The Purpose: Reuse and Hierarchy
+
+Inheritance is primarily used for two reasons:
+1.  **Code Reuse:** Subclasses automatically inherit implemented methods and fields from the parent class, reducing duplicate code.
+2.  **Subtype Polymorphism:** It establishes a shared type hierarchy, allowing a client to treat different subclasses as their common superclass type.
+
+---
+
+## Multiple Inheritance & The Diamond Problem
+
+Most modern object-oriented languages (like Java, C#, and Swift) do not support multiple class inheritance (inheriting from more than one class directly). This is to avoid the **Diamond Problem**.
+
+<img src="/assets/inheritance.svg?v=3" alt="Diamond Problem Diagram" className="mx-auto my-8 w-full max-w-[500px]" />
+
+### The Conflict:
+1.  Class `B` and Class `C` both inherit from Class `A` and override a method `execute()`.
+2.  Class `D` inherits from both `B` and `C` (multiple inheritance).
+3.  When `D.execute()` is called, the compiler does not know whether to run `B`'s version or `C`'s version of `execute()`.
+
+To prevent this ambiguity, these languages restrict class inheritance to **single inheritance** (one direct parent class) while allowing classes to implement multiple interfaces.
+
+---
+
+## Composition vs. Inheritance
+
+One of the most famous guidelines in low-level design is: **"Favor Composition over Inheritance."**
+
+While inheritance is powerful, it creates a **tight, compile-time coupling** (often referred to as the *Fragile Base Class* problem). If the parent class changes, all child classes can break.
+
+*   **Inheritance (IS-A):** Tight coupling. Use only when the relationship is permanent and represents a true hierarchy.
+*   **Composition (HAS-A):** Loose coupling. Instead of inheriting behavior, a class references another class containing the behavior.
+
+### Simple Example: Car and Engine
+
+Inheriting is incorrect when one object is simply a component of another:
+
+```java
+// WRONG: A Car IS NOT an Engine
+public class Car extends Engine {
+    // If Engine implementation details change, Car breaks.
+    // Also, we cannot easily swap Engine types at runtime.
+}
+
+// RIGHT: A Car HAS AN Engine (Composition)
+public class Car {
+    private final Engine engine; // Can easily inject CombustionEngine or ElectricEngine
+
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+}
+```
+
+### The Fragile Base Class Example
+
+If we want a class that counts the number of mathematical operations performed, we might extend a base `Calculator` class:
+
+```java
+// Base class (written by someone else)
+public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int addThree(int a, int b, int c) {
+        // Internally calls its own add() method
+        return add(a, b) + c;
+    }
+}
+
+// Subclass trying to count operations
+public class CountingCalculator extends Calculator {
+    private int operationCount = 0;
+
+    @Override
+    public int add(int a, int b) {
+        operationCount++;
+        return super.add(a, b);
+    }
+
+    @Override
+    public int addThree(int a, int b, int c) {
+        operationCount++;
+        return super.addThree(a, b, c);
+    }
+
+    public int getOperationCount() {
+        return operationCount;
+    }
+}
+```
+
+### Why it Breaks (Double Counting)
+
+If you call `addThree(1, 2, 3)` on `CountingCalculator`, you expect `operationCount` to be `1` (since it is one logical operation from the client's perspective). However, the final count will be **`2`**.
+
+Here is why:
+1.  **Our subclass** intercepts the `addThree` call and increments `operationCount` to `1`.
+2.  It delegates to the parent class: `super.addThree(a, b, c)`.
+3.  Internally, the parent class's `addThree()` method calls `add(a, b)`.
+4.  Because we overrode `add()`, execution is redirected back to our overridden `add()` method, which increments `operationCount` to `2`.
+
+This subclass is fragile. We are forced to know the undocumented internal implementation details of `Calculator`. If a future developer updates `Calculator.addThree()` to not call `add()` internally, our subclass's counting behavior will silently change or break.
+
+### Other Limitations of Inheritance Coupling
+
+Beyond fragile classes, tight inheritance coupling introduces other design issues:
+*   **Violating Encapsulation:** A subclass inherits *every* public method from its parent, which can expose operations that violate the child's invariants. For example, if a `ReadOnlyDatabase` class extends a standard `Database` class, it inherits the `write()` method. A client can still call `readOnlyDb.write()`, completely breaking the read-only safety of the subclass.
+*   **Compile-Time Rigidity:** The relationship is locked at compile-time. You cannot dynamically swap or change parent behavior at runtime.
+*   **Class Explosion:** Combining different feature permutations (e.g., logging, caching, and encrypting) requires creating a separate subclass for every single combination, leading to a massive, hard-to-manage class hierarchy.
+
+---
+
+### The Composition Alternative (HAS-A)
+
+Instead of extending `Calculator`, we wrap it. This shields us from the internal logic of the calculator class:
+
+```java
+public class CountingCalculatorWrapper {
+    private final Calculator calculator = new Calculator(); // Composition (HAS-A)
+    private int operationCount = 0;
+
+    public int add(int a, int b) {
+        operationCount++;
+        return calculator.add(a, b);
+    }
+
+    public int addThree(int a, int b, int c) {
+        operationCount++;
+        return calculator.addThree(a, b, c);
+    }
+
+    public int getOperationCount() {
+        return operationCount;
+    }
+}
+```
+
+---
+
+## Summary
+
+*   **Inheritance (IS-A):** Derives fields and behavior from a parent class. Useful for sharing code and building hierarchies.
+*   **Diamond Problem:** Ambiguity caused by multiple inheritance, which is why many languages only support single inheritance.
+*   **Favor Composition (HAS-A):** Keep systems flexible by composing behavior rather than inheriting it, reducing tight coupling and fragile hierarchies.

@@ -1,0 +1,82 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280" width="600" height="280">
+  <defs>
+    <style>
+      /* Light Mode Styles (default) */
+      .class-box { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; }
+      .class-text { fill: #1f263a; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      
+      .interface-box { fill: #d3daea; stroke: #0274a7; stroke-width: 2; }
+      .interface-text { fill: #12222c; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; }
+      
+      .line { stroke: #1e1e1e; stroke-width: 2; fill: none; }
+      .line-dashed { stroke: #1e1e1e; stroke-width: 2; stroke-dasharray: 6,4; fill: none; }
+      .arrow-solid { fill: #1e1e1e; }
+      .arrow-hollow { fill: #ffffff; stroke: #1e1e1e; stroke-width: 2; }
+      
+      .label-text { fill: #555555; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; }
+      .title-text { fill: #111111; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: bold; text-decoration: underline; }
+      
+      /* Dark Mode Overrides */
+      @media (prefers-color-scheme: dark) {
+        .class-box { fill: #1e1b4b !important; stroke: #818cf8 !important; }
+        .class-text { fill: #e0e7ff !important; }
+        
+        .interface-box { fill: #0f172a !important; stroke: #38bdf8 !important; }
+        .interface-text { fill: #e0f2fe !important; }
+        
+        .line { stroke: #94a3b8 !important; }
+        .line-dashed { stroke: #94a3b8 !important; }
+        .arrow-solid { fill: #94a3b8 !important; }
+        .arrow-hollow { fill: #0f172a !important; stroke: #38bdf8 !important; }
+        
+        .label-text { fill: #94a3b8 !important; }
+        .title-text { fill: #f8fafc !important; }
+      }
+    </style>
+  </defs>
+
+  <!-- Left Side: Tight Coupling -->
+  <text x="110" y="25" text-anchor="middle" class="title-text">TIGHT COUPLING</text>
+  
+  <rect x="20" y="50" width="180" height="50" rx="8" ry="8" class="class-box" />
+  <text x="110" y="80" text-anchor="middle" class="class-text">NotificationService</text>
+
+  <rect x="20" y="180" width="180" height="50" rx="8" ry="8" class="class-box" />
+  <text x="110" y="210" text-anchor="middle" class="class-text">EmailSender</text>
+
+  <!-- Direct Dependency Arrow (Solid, pointing down) -->
+  <line x1="110" y1="100" x2="110" y2="170" class="line" />
+  <polygon points="110,180 104,168 116,168" class="arrow-solid" />
+  <text x="120" y="145" class="label-text">depends on</text>
+
+
+  <!-- Right Side: Loose Coupling -->
+  <text x="440" y="25" text-anchor="middle" class="title-text">LOOSE COUPLING</text>
+
+  <rect x="350" y="50" width="180" height="50" rx="8" ry="8" class="class-box" />
+  <text x="440" y="80" text-anchor="middle" class="class-text">NotificationService</text>
+
+  <rect x="330" y="140" width="220" height="50" rx="8" ry="8" class="interface-box" />
+  <text x="440" y="170" text-anchor="middle" class="interface-text">&lt;&lt;interface&gt;&gt; MessageSender</text>
+
+  <rect x="290" y="225" width="130" height="45" rx="6" ry="6" class="class-box" />
+  <text x="355" y="252" text-anchor="middle" class="class-text">EmailSender</text>
+
+  <rect x="440" y="225" width="130" height="45" rx="6" ry="6" class="class-box" />
+  <text x="505" y="252" text-anchor="middle" class="class-text">SmsSender</text>
+
+  <!-- Service to Interface Dependency Arrow (Solid, pointing down) -->
+  <line x1="440" y1="100" x2="440" y2="130" class="line" />
+  <polygon points="440,140 434,128 446,128" class="arrow-solid" />
+
+  <!-- Implementations to Interface Realization Arrows (Dashed, hollow triangle pointing up) -->
+  <!-- EmailSender -> MessageSender -->
+  <line x1="355" y1="225" x2="355" y2="200" class="line-dashed" />
+  <polygon points="355,190 349,202 361,202" class="arrow-hollow" />
+
+  <!-- SmsSender -> MessageSender -->
+  <line x1="505" y1="225" x2="505" y2="200" class="line-dashed" />
+  <polygon points="505,190 499,202 511,202" class="arrow-hollow" />
+</svg>

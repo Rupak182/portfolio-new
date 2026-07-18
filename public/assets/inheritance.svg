@@ -1,0 +1,72 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 270" width="500" height="270">
+  <defs>
+    <style>
+      /* Light Mode Styles (default) */
+      .class-a { fill: #d2cff8; stroke: #626bc8; stroke-width: 2; }
+      .class-bc { fill: #d3daea; stroke: #0274a7; stroke-width: 2; }
+      .class-d { fill: #b4d8cf; stroke: #007947; stroke-width: 2; }
+      
+      .text-title { fill: #1f263a; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; }
+      .text-method { fill: #333333; font-family: 'Inter', sans-serif; font-size: 11px; }
+      .text-conflict { fill: #b91c1c; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; }
+      
+      .line { stroke: #1e1e1e; stroke-width: 2; fill: none; }
+      .arrow-hollow { fill: #ffffff; stroke: #1e1e1e; stroke-width: 2; }
+      
+      /* Dark Mode Overrides */
+      @media (prefers-color-scheme: dark) {
+        .class-a { fill: #1e1b4b !important; stroke: #818cf8 !important; }
+        .class-bc { fill: #0f172a !important; stroke: #38bdf8 !important; }
+        .class-d { fill: #022c22 !important; stroke: #34d399 !important; }
+        
+        .text-title { fill: #e0e7ff !important; }
+        .text-method { fill: #cbd5e1 !important; }
+        .text-conflict { fill: #f87171 !important; }
+        
+        .line { stroke: #94a3b8 !important; }
+        .arrow-hollow { fill: #0f172a !important; stroke: #94a3b8 !important; }
+      }
+    </style>
+  </defs>
+
+  <!-- Class A (Top Parent) -->
+  <rect x="175" y="15" width="150" height="60" rx="6" ry="6" class="class-a" />
+  <text x="250" y="38" text-anchor="middle" class="text-title">Class A</text>
+  <text x="250" y="56" text-anchor="middle" class="text-method">execute()</text>
+
+  <!-- Class B (Middle Left) -->
+  <rect x="35" y="105" width="150" height="60" rx="6" ry="6" class="class-bc" />
+  <text x="110" y="128" text-anchor="middle" class="text-title">Class B</text>
+  <text x="110" y="146" text-anchor="middle" class="text-method">execute() [override]</text>
+
+  <!-- Class C (Middle Right) -->
+  <rect x="315" y="105" width="150" height="60" rx="6" ry="6" class="class-bc" />
+  <text x="390" y="128" text-anchor="middle" class="text-title">Class C</text>
+  <text x="390" y="146" text-anchor="middle" class="text-method">execute() [override]</text>
+
+  <!-- Class D (Bottom Child) -->
+  <rect x="175" y="195" width="150" height="60" rx="6" ry="6" class="class-d" />
+  <text x="250" y="218" text-anchor="middle" class="text-title">Class D</text>
+  <text x="250" y="236" text-anchor="middle" class="text-conflict">execute() [AMBIGUOUS]</text>
+
+  <!-- Inheritances: B and C inherit A -->
+  <!-- Line B to A -->
+  <path d="M 110,105 L 110,85 L 250,85" class="line" />
+  <!-- Line C to A -->
+  <path d="M 390,105 L 390,85 L 250,85" class="line" />
+  <!-- Arrowhead pointing to A -->
+  <polygon points="250,75 244,85 256,85" class="arrow-hollow" />
+
+  <!-- Inheritances: D inherits B and C -->
+  <!-- Line D to B -->
+  <path d="M 210,195 L 210,175 L 110,175" class="line" />
+  <!-- Arrowhead pointing to B -->
+  <polygon points="110,165 104,175 116,175" class="arrow-hollow" />
+
+  <!-- Line D to C -->
+  <path d="M 290,195 L 290,175 L 390,175" class="line" />
+  <!-- Arrowhead pointing to C -->
+  <polygon points="390,165 384,175 396,175" class="arrow-hollow" />
+</svg>

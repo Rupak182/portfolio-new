@@ -1,0 +1,167 @@
+---
+title: Abstraction
+date: 2026-07-18
+description: Abstraction in Low-Level Design, exploring detail hiding, levels of abstraction, and how it differs from encapsulation.
+tags: ["Low Level Design", "OOP"]
+---
+
+In object-oriented system design, **Abstraction** is the process of modeling a complex real-world entity by focusing only on the properties and behaviors that are relevant to the current context, while filtering out (abstracting away) unnecessary details.
+
+Since we cannot (and do not need to) model every single detail of a real-world entity in code, we build a simplified representation containing only what is relevant to our system.
+
+This article covers how abstraction manages system complexity, provides concrete code examples, and clarifies the difference between abstraction and encapsulation.
+
+---
+
+## Abstraction as Simplified Modeling
+
+Abstraction is about **reducing complexity by filtering out irrelevant details**. The same real-world entity can have completely different abstractions depending on the context of the system:
+
+*   **A Car in a Racing Game:** The abstraction model includes `topSpeed`, `acceleration`, and `steer()`. It ignores price, VIN, and owner details.
+*   **A Car in a Dealership Inventory:** The abstraction model includes `price`, `VIN`, and `manufacturer`. It ignores physics, speed, and steering mechanics.
+
+### Hiding Implementation Complexity
+
+Beyond modeling, abstraction is also used to hide the complex inner workings of a system behind a simplified interface. 
+
+For example, to drive a car, you only need to interact with the dashboard, steering wheel, and pedals. You do not need to understand the combustion engine or the transmission system under the hood. The pedals form the **abstraction layer** shielding you from that complexity.
+
+<img src="/assets/abstraction.svg" alt="Abstraction Layer Diagram" className="mx-auto my-8 w-full max-w-[500px]" />
+
+In software, we achieve this by defining clean contracts (interfaces or abstract classes) and hiding the complex implementation details behind them.
+
+> [!NOTE]
+> **Abstraction vs. Interface:**
+> **Abstraction** is a design goal (hiding complexity). An **Interface** is a language feature (a mechanism we use to achieve that goal). You can build abstractions using interfaces, abstract classes, or even simple public method signatures.
+>
+> For instance, a concrete `OrderProcessor` class with a simple public method:
+> ```java
+> public class OrderProcessor {
+>     // Simple public method signature (the abstraction contract)
+>     public void process(Order order) {
+>         validate(order);
+>         chargeCard(order.getPaymentDetails());
+>         updateInventory(order.getItems());
+>     }
+>     // Complex implementation details are kept private and hidden
+>     private void validate(Order o) { /*...*/ }
+>     private void chargeCard(PaymentDetails p) { /*...*/ }
+>     private void updateInventory(List<Item> items) { /*...*/ }
+> }
+> ```
+> Here, the caller only depends on the simple `process()` abstraction, completely unaware of the underlying credit card charging or inventory logic.
+
+---
+
+## Code Example: Database Storage
+
+Imagine a service that needs to save user data. The service should not care *how* or *where* the data is saved (e.g., in a SQL database, a file, or cloud storage). It should only care that a storage mechanism exists.
+
+### 1. The Abstraction (What)
+We define a simple interface representing the capability to save data:
+
+```java
+public interface UserStorage {
+    void save(User user);
+}
+```
+
+### 2. The Implementation (How)
+The complex database connection, SQL generation, and execution details are hidden inside the concrete class:
+
+```java
+public class SqlUserStorage implements UserStorage {
+    private DatabaseConnection connection;
+
+    @Override
+    public void save(User user) {
+        // Complex SQL and database operations hidden here
+        String sql = "INSERT INTO users (id, name) VALUES (?, ?)";
+        connection.execute(sql, user.getId(), user.getName());
+    }
+}
+```
+
+### 3. Client Usage
+The client depends only on the abstraction, staying completely clean of database-specific logic:
+
+```java
+public class UserService {
+    private final UserStorage storage; // Depends on abstraction
+
+    public UserService(UserStorage storage) {
+        this.storage = storage;
+    }
+
+    public void registerUser(User user) {
+        // Business logic...
+        storage.save(user); // Simple, clean call
+    }
+}
+```
+
+---
+
+## Abstract Classes as Abstractions
+
+An **Abstract Class** provides abstraction at two different levels:
+
+*   **For the Client (Caller):** It acts as a unified interface. The client doesn't know (or care) which methods are implemented by the base class and which ones are overridden by a subclass—they just use the high-level template.
+*   **For the Subclass (Implementer):** It abstracts away the shared boilerplate (such as base constructors, common fields, and helper methods), so the subclass developer only has to focus on implementing the unique, subclass-specific logic.
+
+### Code Example: File Storage
+
+```java
+// Abstract class defines a template with shared logic and state
+public abstract class FileStorage {
+    protected final String baseDirectory; // Shared state
+
+    public FileStorage(String baseDirectory) {
+        this.baseDirectory = baseDirectory;
+    }
+
+    // Shared concrete helper method
+    protected boolean isValidPath(String filename) {
+        return filename != null && !filename.isEmpty();
+    }
+
+    // Abstract contract: subclasses must implement this
+    public abstract void writeData(String filename, byte[] data);
+}
+
+// Concrete subclass inherits shared state/behavior and implements the contract
+public class LocalDiskStorage extends FileStorage {
+    public LocalDiskStorage(String baseDirectory) {
+        super(baseDirectory);
+    }
+
+    @Override
+    public void writeData(String filename, byte[] data) {
+        if (!isValidPath(filename)) {
+            throw new IllegalArgumentException("Invalid path.");
+        }
+        // Write byte array to local baseDirectory + filename
+    }
+}
+```
+
+---
+
+## Abstraction vs. Encapsulation
+
+While both concepts involve hiding information, they serve different purposes and operate at different levels of design:
+
+| Aspect | Abstraction | Encapsulation |
+| :--- | :--- | :--- |
+| **Primary Goal** | **Hides complexity** by showing only essential behaviors. | **Hides state** to protect data integrity and control modifications. |
+| **Design Level** | Happens at the **outer design level** (e.g., interfaces, system boundaries). | Happens at the **internal implementation level** (e.g., classes, access modifiers). |
+| **Focus** | Focuses on **what** an object does. | Focuses on **how** an object secures its data. |
+| **Mnemonic** | *"Detail hiding"* | *"Data hiding"* |
+
+---
+
+## Summary
+
+*   **Abstraction:** Simplifies systems by hiding implementation details and exposing only what is necessary.
+*   **Decoupling:** Depending on abstractions allows you to change the underlying implementation (e.g., swapping SQL storage for Cloud storage) without affecting the rest of the application.
+*   **Abstraction vs. Encapsulation:** Abstraction hides complexity at the design level; encapsulation hides data and bundles it with behavior at the implementation level.

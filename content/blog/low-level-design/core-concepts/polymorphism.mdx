@@ -1,0 +1,136 @@
+---
+title: Polymorphism
+date: 2026-07-18
+description: Deep dive into Polymorphism in Low-Level Design, explaining overloading, overriding, dynamic dispatch, and static vs. dynamic binding.
+tags: ["Low Level Design", "OOP"]
+---
+
+**Polymorphism** (meaning "many forms") is the ability of different objects to respond to the same method call in their own unique way. 
+
+It allows a system to remain extensible by letting you write code that interacts with a high-level abstraction, without caring which specific implementation is executing at runtime.
+
+---
+
+## Types of Polymorphism
+
+In low-level design and programming languages, polymorphism is divided into two primary types:
+
+| Feature | Static (Compile-Time) | Dynamic (Runtime) |
+| :--- | :--- | :--- |
+| **How it is implemented** | Method Overloading | Method Overriding |
+| **When it is decided** | Compile-Time (before running) | Runtime (during execution) |
+| **Who decides it** | Compiler | Runtime (JVM, V8 Engine, etc.) |
+| **Binding Type** | Static Binding | Dynamic Binding |
+| **Decided based on** | Reference variable type & parameters | Actual object type in memory |
+
+---
+
+## 1. Compile-Time Polymorphism (Method Overloading)
+
+**Method Overloading** occurs when multiple methods in the same class share the same name but have different parameter lists (different types, order, or number of arguments).
+
+The compiler decides *exactly* which method to execute at compile-time based on the arguments passed by the caller.
+
+```java
+public class Logger {
+    // Overload 1: Takes a String
+    public void log(String message) {
+        System.out.println("LOG: " + message);
+    }
+
+    // Overload 2: Takes an Exception
+    public void log(Exception error) {
+        System.out.println("ERROR: " + error.getMessage());
+    }
+}
+```
+
+---
+
+## 2. Runtime Polymorphism (Method Overriding)
+
+**Method Overriding** occurs when a subclass provides its own specific implementation of a method that is already defined in its parent class or interface.
+
+At runtime, the program determines the actual object type in memory and executes its specific version of the method.
+
+```java
+// Abstraction contract
+public interface PaymentProcessor {
+    void process(double amount);
+}
+
+// Subclass 1
+public class CreditCardProcessor implements PaymentProcessor {
+    @Override
+    public void process(double amount) {
+        System.out.println("Charging card: $" + amount);
+    }
+}
+
+// Subclass 2
+public class PaypalProcessor implements PaymentProcessor {
+    @Override
+    public void process(double amount) {
+        System.out.println("Processing Paypal payment: $" + amount);
+    }
+}
+```
+
+If we write client code to use this:
+```java
+PaymentProcessor processor = new CreditCardProcessor();
+processor.process(100.0); // Output: Charging card: $100.0
+```
+
+---
+
+## How Dynamic Dispatch Works Under the Hood
+
+When you compile `processor.process(100.0)`, the compiler only checks that the class `PaymentProcessor` has a `process(double)` method. The compiler does *not* know which concrete class will execute. 
+
+At runtime, the runtime environment uses **Dynamic Dispatch** to route the call to the correct object.
+
+<img src="/assets/dynamic_dispatch.svg?v=1" alt="Dynamic Dispatch Diagram" className="mx-auto my-8 w-full max-w-[500px]" />
+
+1.  **Reference Type:** The reference variable `processor` is of type `PaymentProcessor` (compile-time contract).
+2.  **Actual Object:** The actual object stored in the heap is a `CreditCardProcessor`.
+3.  **Method Resolution:** At runtime, the runtime environment looks up the actual object's class type in memory and executes its overridden version of `process()`.
+
+> [!NOTE]
+> **Why can't the compiler resolve object types at compile-time?**
+> A compiler cannot predict the future. In real-world software, the actual object type depends on runtime data, user interactions (e.g., clicking PayPal vs. Credit Card), database records, or dynamic plugin loading. Resolving everything at compile-time would make the system static and rigid, defeating the purpose of using polymorphism in designs.
+
+---
+
+## Static vs. Dynamic Binding
+
+Understanding binding is crucial for avoiding subtle bugs when dealing with overloaded and overridden methods:
+
+*   **Static Binding (Early Binding):** Method resolution happens at compile-time. This is used for `private`, `static`, or `final` methods, and variables. They cannot be overridden, so the compiler binds them directly.
+*   **Dynamic Binding (Late Binding):** Method resolution happens at runtime. This is used for virtual/overrideable methods.
+
+### Variable Hiding: Variables do not use Dynamic Binding
+
+If you declare a variable with the same name in both parent and child classes, the variable is **not** overridden—it is hidden. Variables always resolve using **static binding** based on the reference type, not the object type:
+
+```java
+public class Parent {
+    public String name = "Parent";
+}
+
+public class Child extends Parent {
+    public String name = "Child"; // Hides parent variable
+}
+
+// In Client Code:
+Parent person = new Child();
+System.out.println(person.name); // Prints "Parent", NOT "Child"!
+```
+
+---
+
+## Summary
+
+*   **Compile-Time Polymorphism (Overloading):** Resolved by parameter signature at compile-time.
+*   **Runtime Polymorphism (Overriding):** Resolved by actual object type at runtime using dynamic dispatch.
+*   **Binding Rule:** Methods are bound dynamically at runtime based on the actual object. Variables are bound statically at compile-time based on the reference type.

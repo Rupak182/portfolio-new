@@ -1,0 +1,195 @@
+---
+title: Enums (Enumerations)
+date: 2026-07-18
+description: Enums in Low-Level Design, exploring state management, constant-specific behavior, and domain modeling.
+tags: ["Low Level Design", "OOP"]
+---
+
+When designing software systems, we frequently encounter situations where a variable can only hold one of a fixed, predetermined set of values. Examples include order statuses (`PENDING`, `SHIPPED`, `DELIVERED`), user roles (`ADMIN`, `EDITOR`, `VIEWER`), or math operations (`ADD`, `SUBTRACT`).
+
+In Low-Level Design (LLD), we use **Enums (Enumerations)** to represent these discrete values. Enums help us build type-safe, readable, and highly maintainable domain models.
+
+This article covers the core concepts of enums, how they encapsulate state and behavior, and how to apply them in real-world system designs.
+
+---
+
+## The Problem: Anti-Patterns in State Representation
+
+Before enums were widely supported, developers typically represented a list of options using primitive constants (like integers or strings):
+
+```java
+public class Order {
+    public static final int STATUS_PENDING = 0;
+    public static final int STATUS_SHIPPED = 1;
+    public static final int STATUS_DELIVERED = 2;
+
+    private int status;
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+}
+```
+
+This approach introduces several design issues:
+1. **Lack of Type Safety:** Any integer (e.g., `99` or `-1`) can be passed to `setStatus()`, and the compiler will not catch the error.
+2. **Poor Readability:** Printing the status yields a number (like `0` or `1`), which makes logs difficult to read without referencing the source code.
+3. **No Encapsulation:** We cannot easily bind behavior or metadata (like a description or validation rules) directly to these integer codes.
+
+Enums solve these issues by introducing a dedicated type that limits variables to a specific set of predefined instances.
+
+---
+
+## Enums as Rich Objects
+
+In modern object-oriented languages, enums are not just named integers; they are full-fledged objects. They can contain **attributes (state)** and **methods (behavior)**. This allows each enum constant to package its own metadata.
+
+For instance, we can design an `OrderStatus` enum where each status is associated with an internal database code and a user-friendly description:
+
+```java
+public enum OrderStatus {
+    PENDING(100, "Order has been placed but not processed."),
+    SHIPPED(200, "Order has been shipped and is on the way."),
+    DELIVERED(300, "Order has been successfully delivered.");
+
+    // State encapsulated within each constant
+    private final int code;
+    private final String description;
+
+    private OrderStatus(int code, String description) {
+        this.code = code;
+        this.description = description;
+    }
+
+    public int getCode() { return this.code; }
+    public String getDescription() { return this.description; }
+}
+```
+By encapsulating state inside the enum, we avoid having to write helper classes or utility methods just to look up status descriptions.
+
+---
+
+## Constant-Specific Behavior (Polymorphic Enums)
+
+One of the most powerful LLD patterns is using enums to eliminate conditional branching (`if-else` or `switch` statements). 
+
+If different enum constants require different execution logic, we can declare an abstract operation on the enum class, and let each constant implement its own version. This is a form of **polymorphism** built directly into the enumeration.
+
+Let's design a mathematical `Operation` enum using this approach:
+
+```java
+public enum Operation {
+    ADD {
+        @Override
+        public double apply(double x, double y) { return x + y; }
+    },
+    SUBTRACT {
+        @Override
+        public double apply(double x, double y) { return x - y; }
+    },
+    MULTIPLY {
+        @Override
+        public double apply(double x, double y) { return x * y; }
+    },
+    DIVIDE {
+        @Override
+        public double apply(double x, double y) {
+            if (y == 0) {
+                throw new ArithmeticException("Division by zero");
+            }
+            return x / y;
+        }
+    };
+
+    // Every constant is forced to implement this behavior
+    public abstract double apply(double x, double y);
+}
+```
+
+### Design Benefits:
+*   **Open-Closed Principle (OCP):** If we need to add a new operation (e.g., `MODULO`), we simply add a new constant to the enum with its implementation. We don't have to modify any existing code or search for `switch` statements scattered across the codebase.
+*   **Encapsulation:** The logic for each operation is kept right next to the constant representing it.
+
+---
+
+## Low-Level Design Use Cases
+
+Enums serve as foundational structures in several classic LLD patterns.
+
+### 1. State Machine Pattern
+Enums are the standard way to define the states of a system. By combining them with constant-specific behavior, we can easily enforce valid transitions between states.
+
+For example, in an e-commerce order system, an order should transition smoothly from creation to delivery, preventing invalid shortcuts (like going straight from `CREATED` to `DELIVERED`).
+
+<img src="/assets/enums.svg" alt="Order State Transition Diagram" className="mx-auto my-8 w-full max-w-[600px]" />
+
+Here is how we can implement this transition ruleset using enums:
+
+```java
+public enum OrderState {
+    CREATED {
+        @Override
+        public boolean canTransitionTo(OrderState nextState) {
+            return nextState == PAID || nextState == CANCELLED;
+        }
+    },
+    PAID {
+        @Override
+        public boolean canTransitionTo(OrderState nextState) {
+            return nextState == SHIPPED;
+        }
+    },
+    SHIPPED {
+        @Override
+        public boolean canTransitionTo(OrderState nextState) {
+            return nextState == DELIVERED;
+        }
+    },
+    DELIVERED {
+        @Override
+        public boolean canTransitionTo(OrderState nextState) {
+            return false; // Final state
+        }
+    },
+    CANCELLED {
+        @Override
+        public boolean canTransitionTo(OrderState nextState) {
+            return false; // Final state
+        }
+    };
+
+    // Enforces the transition ruleset
+    public abstract boolean canTransitionTo(OrderState nextState);
+}
+```
+
+### 2. Thread-Safe Singletons
+In object-oriented design, we sometimes require a class to have only a single, globally accessible instance (e.g., a configuration manager or database connection pool). 
+
+Defining a singleton as a single-element enum is a clean, robust approach. The underlying runtime environment handles the creation, thread safety, and serialization protection automatically, preventing multiple instances from being created:
+
+```java
+public enum ConfigurationManager {
+    INSTANCE;
+
+    private Map<String, String> settings;
+
+    private ConfigurationManager() {
+        this.settings = new HashMap<>();
+        // Load settings here
+    }
+
+    public String getSetting(String key) {
+        return settings.get(key);
+    }
+}
+```
+
+---
+
+## Summary
+
+*   **Type Safety:** Enums constrain input values to a predefined set of valid choices at compile-time.
+*   **Rich States:** Enums can encapsulate both fields (metadata) and methods, making them self-contained domain objects.
+*   **Polymorphic Behavior:** Abstract methods in enums allow individual constants to define their own execution logic, eliminating messy switch blocks and satisfying the Open-Closed Principle.
+*   **State Machines & Singletons:** Enums are primary building blocks for enforcing state transitions and implementing thread-safe global instances.
