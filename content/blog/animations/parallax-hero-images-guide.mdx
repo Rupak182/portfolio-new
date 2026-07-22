@@ -1,0 +1,317 @@
+---
+title: Mouse-Responsive Parallax Hero Images
+date: 2026-07-22
+description: A breakdown of mouse tracking, responsive spring physics, and transformed depth-based offsets in React using Framer Motion.
+tags: ["Animations", "Framer Motion", "Tailwind CSS", "React"]
+---
+
+Implementation breakdown of the **ParallaxHeroImages** component, covering its layout positioning, customizable depth variants, and mouse-controlled spring animations.
+
+> [!NOTE]
+> This component is referenced from the [Aceternity UI Parallax Hero Images](https://ui.aceternity.com/components/parallax-hero-images).
+
+<img src="/assets/parallax-hero-demo.gif" alt="Mouse-Responsive Parallax Hero Images Demo" className="mx-auto my-8 w-full max-w-[600px] rounded-lg shadow-md" />
+
+---
+
+## 1. High-Level Overview
+
+The `ParallaxHeroImages` component renders an absolute-positioned grid of up to 8 images scattered across the screen. As the user moves their cursor:
+
+* **Mouse Position Tracking:** The component tracks the mouse coordinate relative to the screen dimensions and normalizes it.
+* **Varying Depth Offsets:** Individual images shift under a clean spring dynamic, but in *varying ratios* depending on their assigned depth.
+* **Parallax Illusion:** This creates a realistic parallax effect where closer images (higher depth values) slide more, and background images (lower depth values) move less.
+
+---
+
+## 2. Component Implementation (`parallax-hero-images.tsx`)
+
+Below is the complete implementation of the `ParallaxHeroImages` component using Framer Motion (`motion/react`) for spring-loaded physical interactions:
+
+```tsx
+"use client";
+import React, { useEffect, useState, useMemo, useCallback, memo } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  MotionValue,
+} from "motion/react";
+import { cn } from "@/lib/utils";
+
+type ImagePosition = {
+  src: string;
+  position:
+    | "top-left"
+    | "top-right"
+    | "mid-left"
+    | "mid-right"
+    | "bottom-left"
+    | "bottom-right"
+    | "far-left"
+    | "far-right";
+  depth: number;
+  delay: number;
+};
+
+const positionStyles: Record<
+  ImagePosition["position"],
+  { top: string; left?: string; right?: string }
+> = {
+  "top-left": { top: "8%", left: "4%" },
+  "top-right": { top: "8%", right: "4%" },
+  "mid-left": { top: "38%", left: "6%" },
+  "mid-right": { top: "38%", right: "6%" },
+  "bottom-left": { top: "68%", left: "4%" },
+  "bottom-right": { top: "68%", right: "4%" },
+  "far-left": { top: "52%", left: "2%" },
+  "far-right": { top: "52%", right: "2%" },
+};
+
+const positionOrder: ImagePosition["position"][] = [
+  "top-left",
+  "top-right",
+  "mid-left",
+  "mid-right",
+  "bottom-left",
+  "bottom-right",
+  "far-left",
+  "far-right",
+];
+
+type DepthVariant = "default" | "edge-focus";
+
+const depthValuesByVariant: Record<DepthVariant, number[]> = {
+  default: [0.3, 0.35, 0.9, 0.85, 0.4, 0.45, 0.25, 0.2],
+  "edge-focus": [0.85, 0.9, 0.3, 0.35, 0.8, 0.85, 0.4, 0.45],
+};
+
+const SPRING_CONFIG = { damping: 25, stiffness: 120 };
+
+export interface ParallaxHeroImagesProps {
+  images: string[];
+  className?: string;
+  imageClassName?: string;
+  variant?: DepthVariant;
+}
+
+export const ParallaxHeroImages = ({
+  images,
+  className,
+  imageClassName,
+  variant = "default",
+}: ParallaxHeroImagesProps) => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const smoothMouseX = useSpring(mouseX, SPRING_CONFIG);
+  const smoothMouseY = useSpring(mouseY, SPRING_CONFIG);
+
+  const positions = useMemo(() => {
+    const limitedImages = images.slice(0, 8);
+    const depthValues = depthValuesByVariant[variant];
+    return limitedImages.map((src, index) => ({
+      src,
+      position: positionOrder[index],
+      depth: depthValues[index],
+      delay: index * 0.12,
+    }));
+  }, [images, variant]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <div
+      className={cn(
+        "pointer-events-none absolute inset-0 overflow-hidden",
+        className,
+      )}
+    >
+      {positions.map((pos, index) => (
+        <ParallaxImage
+          key={`${pos.src}-${index}`}
+          src={pos.src}
+          position={pos.position}
+          depth={pos.depth}
+          delay={pos.delay}
+          imageClassName={imageClassName}
+          smoothMouseX={smoothMouseX}
+          smoothMouseY={smoothMouseY}
+        />
+      ))}
+    </div>
+  );
+};
+
+interface ParallaxImageProps extends ImagePosition {
+  imageClassName?: string;
+  smoothMouseX: MotionValue<number>;
+  smoothMouseY: MotionValue<number>;
+}
+
+const ParallaxImage = memo(function ParallaxImage({
+  src,
+  position,
+  depth,
+  delay,
+  imageClassName,
+  smoothMouseX,
+  smoothMouseY,
+}: ParallaxImageProps) {
+  const maxOffset = 40;
+
+  const translateX = useTransform(
+    smoothMouseX,
+    [-1, 1],
+    [-maxOffset * depth, maxOffset * depth],
+  );
+
+  const translateY = useTransform(
+    smoothMouseY,
+    [-1, 1],
+    [-maxOffset * depth, maxOffset * depth],
+  );
+
+  const posStyle = positionStyles[position];
+
+  return (
+    <motion.div
+      className="absolute"
+      style={{
+        top: posStyle.top,
+        left: posStyle.left,
+        right: posStyle.right,
+        x: translateX,
+        y: translateY,
+        zIndex: Math.round(depth * 10),
+      }}
+      initial={{ opacity: 0, filter: "blur(20px)", scale: 0.9 }}
+      animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+      transition={{
+        duration: 0.8,
+        delay: delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+    >
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className={cn(
+          "aspect-4/3 h-20 w-32 rounded-lg object-cover shadow-sm ring-1 ring-black/10 sm:h-40 sm:w-56 md:h-52 md:w-80 dark:ring-white/10",
+          imageClassName,
+        )}
+      />
+    </motion.div>
+  );
+});
+```
+
+---
+
+## 3. Grid Layout & Positioning
+
+The visual structure of the hero layout is formed by placing individual image container boxes absolute-positioned at specific percentages within the parent viewport container.
+
+### A. Viewport Constraints
+The parent wrapping context enforces:
+* `pointer-events-none`: Allows background images overlays to not block mouse interactions (clicks, text selection, scroll) on the content underneath.
+* `absolute inset-0 overflow-hidden`: Pins the layout container to fill its relative boundaries completely and prevents overflow scrollbars as outer images float dynamically.
+
+### B. Position Anchoring (Nearest Positioned Ancestor)
+In CSS, absolutely positioned child elements anchor themselves to the nearest ancestor that has a `position` of `absolute`, `relative`, or `fixed` (rather than `static`).
+
+Setting the parent container to `absolute` creates a local context for the child cards:
+* **Coordinate Scoping:** Child coordinates like `top: 8%` or `left: 4%` align relative to the container boundaries, keeping the layout self-contained.
+* **Clipping & Layout:** It enables `overflow-hidden` to crop images that shift out of bounds during interaction.
+* **Reusability:** It allows the component to be dropped anywhere on the site without images flying out of position.
+
+### C. Responsive Percentage Map
+The `positionStyles` map ensures structured scatter layout coordinates across the layout boundary:
+
+| Position | Top Offset | Side Offset |
+| :--- | :--- | :--- |
+| `top-left` | `8%` | `left: 4%` |
+| `top-right` | `8%` | `right: 4%` |
+| `mid-left` | `38%` | `left: 6%` |
+| `mid-right` | `38%` | `right: 6%` |
+| `bottom-left` | `68%` | `left: 4%` |
+| `bottom-right` | `68%` | `right: 4%` |
+| `far-left` | `52%` | `left: 2%` |
+| `far-right` | `52%` | `right: 2%` |
+
+These offsets guarantee that images are positioned responsively across varying screen widths without overlapping the center text column.
+
+---
+
+## 4. Custom Depth Variants & Dynamic Layering
+
+To give users different parallax options, the component leverages depth arrays where each position's depth directly influences both the velocity of translation and the visual layout layering (`zIndex`).
+
+### A. Presets Structure
+Two depth presets are defined within `depthValuesByVariant`:
+* **`default` (Focus Center-Depth):** High depth values are focused near the middle rows (`mid-left` and `mid-right` at `0.9` and `0.85` depth), meaning foreground movement happens in the middle.
+* **`edge-focus` (Focus Outer Borders):** High depth values are concentrated at the corners (`top-left` and `top-right` at `0.85` and `0.9` depth), causing the screen border cards to move more aggressively.
+
+### B. Math-Based Dynamic Layering
+To prevent foreground/background elements from clipping unnaturally during motion transitions, the layer order matches the physical model:
+
+`zIndex = Math.round(depth * 10)`
+
+Applying this calculation inside the inline style of `motion.div` guarantees that items with the maximum depth (closer to the user) are rendered with higher stack ordering (`z-index: 9`) than deep-background items (`z-index: 2`).
+
+---
+
+## 5. Moving Parts of the Interactive Parallax
+
+The motion behavior operates through mouse position normalization, spring-loaded interpolation, and depth-scaled translations.
+
+### 1. Unified Normalized Mouse Tracking
+A window event listener tracks `window.mousemove` coordinates and maps them into a standardized `[-1, 1]` coordinate system:
+
+* `x = (e.clientX / window.innerWidth) * 2 - 1`
+* `y = (e.clientY / window.innerHeight) * 2 - 1`
+
+* **Centering Advantage:** Re-centering the coordinate space around `(0,0)` when the cursor sits at the viewport's exact half-width and half-height ensures that the default position remains perfectly stationary.
+
+### 2. Spring Smoothing
+The coordinates are passed to Framer Motion's `useSpring` hook to smooth raw inputs:
+```ts
+const smoothMouseX = useSpring(mouseX, { damping: 25, stiffness: 120 });
+```
+Damping at `25` combined with `120` stiffness ensures that image offsets move with a highly-polished organic drag, eliminating immediate jumps.
+
+### 3. Translate Offset Scaling
+In `ParallaxImage`, the smooth mouse values are transformed into translation distances using a depth multiplier:
+```ts
+const maxOffset = 40;
+const translateX = useTransform(smoothMouseX, [-1, 1], [-maxOffset * depth, maxOffset * depth]);
+```
+
+The mathematical mapping of translation offsets becomes:
+
+* `translateX = smoothMouseX * maxOffset * depth`
+* `translateY = smoothMouseY * maxOffset * depth`
+
+As depth ranges from `[0.2, 0.9]`:
+* **Background Card (depth = 0.2):** Moves at most `8px` (`40 * 0.2`).
+* **Foreground Card (depth = 0.9):** Moves at most `36px` (`40 * 0.9`).
+
+This gradient of translations accurately mimics optical depth.
+
+### 4. Performance & Smooth Rendering
+To maintain a consistent 60fps during cursor movement:
+* **`React.memo` Wrapper:** The child `ParallaxImage` is wrapped with `memo`. Because it subscribes to `smoothMouseX` and `smoothMouseY` via Framer Motion's `MotionValue` context, Framer Motion can update the elements directly via DOM stylesheet properties (translates), completely bypassing React component re-renders.
+* **Lazy Image Loading:** Images leverage native `loading="lazy"` and `decoding="async"` tags to avoid layout blocks during initial staggered loads.

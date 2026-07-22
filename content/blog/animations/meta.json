@@ -3,6 +3,9 @@
   "root": true,
   "pages": [
     "index",
-    "images-badge-guide"
-  ]
+    "images-badge-guide",
+    "parallax-hero-images-guide"
+  ],
+  "images-badge-guide": "Images Badge",
+  "parallax-hero-images-guide": "Parallax Hero Images"
 }

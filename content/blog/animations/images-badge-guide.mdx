@@ -1,7 +1,7 @@
 ---
-title: Interactive Folder Badge Animation with Framer Motion
+title: Interactive Folder Badge Animation
 date: 2026-07-21
-description: A beginner-friendly breakdown of DOM layering, card-spread mathematical calculations, and Framer Motion spring physics in interactive folder badges.
+description: A breakdown of DOM layering, card-spread mathematical calculations, and Framer Motion spring physics in interactive folder badges.
 tags: ["Animations", "Framer Motion", "Tailwind CSS", "React"]
 ---
 
@@ -284,6 +284,7 @@ Each card is individually animated with an index-specific delay, creating a casc
 #### C. Card Fan Angle Rotation (`rotate`)
 * **Property:** `rotate` value (in degrees).
 * **Calculation:** `isHovered ? baseRotation : teaseRotation`
+* **Transform Hinge Choice (`origin-bottom`):** Standard rotations swing elements around their geometric center (`origin-center`). Setting the transform origin to the bottom center edge acts as a physical hinge; rotation coordinates swing the top parts of the cards outward, mimicking playing cards fanning out of a single central grip point.
 * **Resulting tilt values:**
   - **Default State:** `teaseRotation` (subtle fan-out, e.g., `-3°`, `0°`, `+3°` for 3 images).
   - **Hovered State:** `baseRotation` (maximum fan-out, e.g., `-15°`, `0°`, `+15°` for 3 images).
