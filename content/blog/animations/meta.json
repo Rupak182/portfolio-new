@@ -1,0 +1,8 @@
+{
+  "title": "Animations",
+  "root": true,
+  "pages": [
+    "index",
+    "images-badge-guide"
+  ]
+}

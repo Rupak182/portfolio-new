@@ -1,0 +1,9 @@
+{
+    "title": "System Design Fundamentals",
+    "root": true,
+    "pages": [
+        "index",
+        "intro",
+        "networking"
+    ]
+}

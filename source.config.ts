@@ -11,3 +11,5 @@ export const { docs: blog, meta } = defineDocs({
     }),
   }
 });
+
+// Triggering compile reload
