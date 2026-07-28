@@ -4,8 +4,10 @@
   "pages": [
     "index",
     "images-badge-guide",
-    "parallax-hero-images-guide"
+    "parallax-hero-images-guide",
+    "infinite-marquee-guide"
   ],
   "images-badge-guide": "Images Badge",
-  "parallax-hero-images-guide": "Parallax Hero Images"
+  "parallax-hero-images-guide": "Parallax Hero Images",
+  "infinite-marquee-guide": "Infinite Marquee"
 }
