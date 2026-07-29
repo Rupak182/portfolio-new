@@ -5,9 +5,11 @@
     "index",
     "images-badge-guide",
     "parallax-hero-images-guide",
-    "infinite-marquee-guide"
+    "infinite-marquee-guide",
+    "animated-list-guide"
   ],
   "images-badge-guide": "Images Badge",
   "parallax-hero-images-guide": "Parallax Hero Images",
-  "infinite-marquee-guide": "Infinite Marquee"
+  "infinite-marquee-guide": "Infinite Marquee",
+  "animated-list-guide": "Animated List"
 }
