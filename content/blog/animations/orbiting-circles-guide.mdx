@@ -1,0 +1,229 @@
+---
+title: Upright Orbiting Circles Animation
+date: 2026-07-29
+description: A breakdown of rotating coordinate systems, radial translations, and local counter-rotations to achieve perfectly upright orbiting controls.
+tags: ["Animations", "CSS Keyframes", "Tailwind CSS", "React"]
+---
+
+An implementation breakdown of the **Orbiting Circles** component, covering its CSS-driven 3D coordinate transformations, automatic icon distribution, and techniques for keeping elements upright during circular movement.
+
+> [!NOTE]
+> This component is referenced from the [Magic UI Orbiting Circles](https://magicui.design/docs/components/orbiting-circles).
+
+<img src="/assets/orbiting-circles-demo.gif" alt="Orbiting Circles Animation Demo" className="mx-auto my-8 w-full max-w-[600px] rounded-lg shadow-md" />
+
+---
+
+## 1. High-Level Animation Workflow
+
+Drawing a circle and moving elements along it can be done in several ways. While updating elements programmatically in JavaScript (using `requestAnimationFrame` to compute positions) works, continuously modifying layout styles like `top` and `left` forces the browser to recalculate layouts (reflow) and repaint them on the CPU main thread, which can lead to dropped frames. By contrast, a declarative CSS-only transform chain offloads rendering to the browser's compositing step on the GPU, guaranteeing smooth, hardware-accelerated motion.
+
+The system is built on these primary mechanics:
+1. **Flex & Absolute Stacking:** The parent element centers all child elements in the exact middle of the orbital container. Absolute positioning stacks all child elements on top of each other at the center, aligning their individual local centers with the orbit center.
+2. **Initial Direction Rotation:** A transformation rotates the local coordinate system of each child to match its unique target starting angle.
+3. **Radial Translation:** The child walks along the rotated custom Y-axis, moving outward by the specified radius to land precisely on the perimeter of the orbit circle.
+4. **Postural Counter-Rotation:** An opposite rotation is applied around the child's local origin to cancel out the tilt caused by the initial rotation. This ensures that icons or text faces upright rather than resting on their sides.
+5. **Seamless Keyframe Looping:** The keyframes increment the rotation angle by a full 360 degrees and decrement the counter-rotation angle by 360 degrees over a customizable duration, wrapping the motion in a seamless loop.
+
+<img src="/assets/orbiting-circles-flow.svg" alt="Orbiting Circles Animation Flow" className="mx-auto my-8 block dark:invert max-w-[280px] w-full" />
+
+---
+
+## 2. Component Implementation (`orbiting-circles.tsx`)
+
+Below is the complete implementation of the `OrbitingCircles` component in React, utilizing inline CSS custom properties to share calculations directly with the stylesheet:
+
+```tsx
+import React from "react"
+
+import { cn } from "@/lib/utils"
+
+export interface OrbitingCirclesProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string
+  children?: React.ReactNode
+  reverse?: boolean
+  duration?: number
+  delay?: number
+  radius?: number
+  path?: boolean
+  iconSize?: number
+  speed?: number
+}
+
+export function OrbitingCircles({
+  className,
+  children,
+  reverse,
+  duration = 20,
+  radius = 160,
+  path = true,
+  iconSize = 30,
+  speed = 1,
+  ...props
+}: OrbitingCirclesProps) {
+  const calculatedDuration = duration / speed
+  return (
+    <>
+      {path && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          version="1.1"
+          className="pointer-events-none absolute inset-0 size-full"
+        >
+          <circle
+            className="stroke-black/10 stroke-1 dark:stroke-white/10"
+            cx="50%"
+            cy="50%"
+            r={radius}
+            fill="none"
+          />
+        </svg>
+      )}
+      {React.Children.map(children, (child, index) => {
+        const angle = (360 / React.Children.count(children)) * index
+        return (
+          <div
+            style={
+              {
+                "--duration": calculatedDuration,
+                "--radius": radius,
+                "--angle": angle,
+                "--icon-size": `${iconSize}px`,
+              } as React.CSSProperties
+            }
+            className={cn(
+              `animate-orbit absolute flex size-(--icon-size) transform-gpu items-center justify-center rounded-full`,
+              { "[animation-direction:reverse]": reverse },
+              className
+            )}
+            {...props}
+          >
+            {child}
+          </div>
+        )
+      })}
+    </>
+  )
+}
+```
+
+---
+
+## 3. CSS Custom Properties and Keyframe Configuration
+
+The keyframes config matches the variables set in React and is added to the theme styling configuration:
+
+```css
+/* globals.css */
+--animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+
+@keyframes orbit {
+  0% {
+    transform: 
+      rotate(calc(var(--angle) * 1deg)) 
+      translateY(calc(var(--radius) * 1px)) 
+      rotate(calc(var(--angle) * -1deg));
+  }
+  100% {
+    transform: 
+      rotate(calc(var(--angle) * 1deg + 360deg)) 
+      translateY(calc(var(--radius) * 1px)) 
+      rotate(calc((var(--angle) * -1deg) - 360deg));
+  }
+}
+```
+
+### Scope Isolation of CSS Variables
+React passes values like `--angle` and `--radius` inside the inline `style` property of each child container. This applies **element-specific scoping** where:
+* The variables are resolved locally for that element.
+* Multiple elements can invoke the exact same `@keyframes orbit` rule with different angle and radius offsets, preventing them from overlapping and stacking in the exact same spot on the screen.
+* Multiplying by `1deg` and `1px` converts numbers sent from React into valid CSS units.
+
+---
+
+## 4. Transforming Chained Coordinate Spaces
+
+Applying multiple transforms in a single statement alters the element's local coordinate system sequentially (read right-to-left or outer-to-inner).
+
+### The Math Behind the 0% Keyframe
+Let's see what happens to an element with a calculated starting angle of `90deg` at a radius of `160px` at the initial `0%` frame:
+
+```css
+transform: rotate(90deg) translateY(160px) rotate(-90deg);
+```
+
+1. **`rotate(90deg)` (Swinging the Grid Line):** By default, the element sits in the center of the orbit wrapper. Its `transform-origin` (its pivot point anchor) aligns perfectly with the center of the orbit. Applying `rotate(90deg)` clockwise turns the element's local Y-axis towards 3 o'clock.
+2. **`translateY(160px)` (Walking Outward):** The element travels 160px down its updated local Y-axis (which is now horizontal, pointing East). As it moves, its own local `transform-origin` travels along with it.
+3. **`rotate(-90deg)` (Counter-Rotation):** This rotation is applied on the element's new local origin (its current offset position). By counter-rotating the element `-90deg` in place, it cancels out the tilt caused by the first rotation. This places the element at 3 o'clock while leaving it standing upright.
+
+### The Math Behind the 100% Keyframe
+To complete the loop, the angles are incremented by `360deg` (a full rotation around the orbit center) while the counter-rotation is decremented by `360deg` (spinning the icon back in place on its own center to remain upright during flight):
+
+```css
+transform: rotate(450deg) translateY(160px) rotate(-450deg);
+```
+
+The browser interpolates the intermediate values linearly. For example, exactly halfway through the animation:
+* The positioning angle decreases to `270deg` (6 o'clock position).
+* The counter-rotation angle returns `-270deg`, which cancels out the visual tilt at that coordinate point too.
+
+Without the counter-rotation at `0%` (or if it were only placed at `100%`), the starting state would be tilted, causing the icon to roll and wobble erratically. Keeping it in both keyframes ensures the browser cancels out the tilt on every frame of the journey.
+
+### Understanding Pivot Origins and the Transform Origin Shift
+
+The reason the two rotations do not cancel each other out entirely comes down to how the browser handles the pivot point of the element (its `transform-origin` property, which defaults to `50% 50%`):
+
+1. **Before any transforms run:** The element sits exactly in the center of the orbit, stacked on top of other icons. Its local center aligns exactly with the center of the orbit circle.
+2. **First `rotate`:** It spins around the aligned center point. Because the element's center matches the orbit's center, it rotates the element around the orbit center and spins it on its own axis at the same time.
+3. **`translateY`:** It pushes the element outward. Crucially, **the element's local pivot origin (transform-origin) walks with it**.
+4. **Second `rotate`:** The element is now 160px away from the center. The relative counter-rotate behaves relative to this new shifted origin. It spins the element *specifically on its own local axis* to cancel out the visual tilt without pulling it back to the center of the circle.
+
+> [!NOTE]
+> The direction of the translation (`translateY`) depends entirely on the rotation angle of the local axis. Rotating the container first pivots the axis, causing `translateY` to push the element outward along that specific heading angle.
+
+---
+
+## 5. Automatic Distribution Math
+
+To lay out elements uniformly across the circle without manually spacing them, the component utilizes the child's index:
+
+```text
+Angle = (360 / Total Children) * Index
+```
+
+* **Total Children Count:** Computed dynamically via `React.Children.count(children)`.
+* **Angle spacing calculation:** Dividing `360` by the number of children finds the spacing offset. E.g., for 4 elements, `360 / 4 = 90`. Each element sits 90 degrees apart.
+* **Indexing Offset:** Multiplying by the zero-based index determines the initial heading angle offset:
+  * **Element 1 (Index 0):** 90 * 0 = 0 degrees (Starts facing down, heading at 6 o'clock)
+  * **Element 2 (Index 1):** 90 * 1 = 90 degrees (Starts facing right, heading at 3 o'clock)
+  * **Element 3 (Index 2):** 90 * 2 = 180 degrees (Upward facing, heading at 12 o'clock)
+  * **Element 4 (Index 3):** 90 * 3 = 270 degrees (Starts facing left, heading at 9 o'clock)
+
+> [!TIP]
+> **Why does 0 degrees start at 6 o'clock instead of 12 o'clock?**
+> In web development, CSS coordinate systems are inverted vertically: the positive Y-axis points **downward** on the screen. Because the component pushes items outward along this positive vertical axis using `translateY(radius)`, an unrotated element (0 degrees) moves straight down to 6 o'clock. Applying a 180-degree rotation flips the Y-axis upside down, translating that element straight up to 12 o'clock.
+
+Because each element is pushed outward along these radial vectors, they organize themselves into a polygon automatically on render.
+
+---
+
+## 6. GPU Acceleration
+
+The orbiting elements use Tailwind's `transform-gpu` class to apply 3D hardware acceleration (`translate3d` under the hood) for optimal rendering performance:
+
+* **The Bottleneck:** Modifying standard layout positioning values (like mutating `top` or `left`) repeatedly forces the CPU main thread to recalculate layout positions (reflow) and repaint pixels, causing visual jank.
+* **The Optimization:** Using `transform-gpu` instructs the browser to promote each orbiting element to its own composite layer on the GPU. Translating and rotating these pre-rendered layers bypasses the CPU main thread entirely, running smoothly.
+
+---
+
+## 7. Customizable Properties Reference
+
+| Property | Default | Type | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `undefined` | `string` | Optional custom classes to style the container wrapper. |
+| `reverse` | `false` | `boolean` | Reverses the animation direction using `[animation-direction:reverse]`. |
+| `duration` | `20` | `number` | Time in seconds for a complete rotation cycle. |
+| `radius` | `160` | `number` | Distance in pixels separating the orbiting children from the center. |
+| `path` | `true` | `boolean` | Controls whether to render a background SVG circle showing the path of orbit. |
+| `iconSize` | `30` | `number` | Width and height of the orbiting children containers in pixels. |
+| `speed` | `1` | `number` | A multiplier that speeds up or slows down the duration calculation (`duration / speed`). |
