@@ -6,10 +6,12 @@
     "images-badge-guide",
     "parallax-hero-images-guide",
     "infinite-marquee-guide",
-    "animated-list-guide"
+    "animated-list-guide",
+    "dock-guide"
   ],
   "images-badge-guide": "Images Badge",
   "parallax-hero-images-guide": "Parallax Hero Images",
   "infinite-marquee-guide": "Infinite Marquee",
-  "animated-list-guide": "Animated List"
+  "animated-list-guide": "Animated List",
+  "dock-guide": "Interactive Dock"
 }
