@@ -8,12 +8,14 @@
     "infinite-marquee-guide",
     "animated-list-guide",
     "dock-guide",
-    "lens-guide"
+    "lens-guide",
+    "animated-beam-guide"
   ],
   "images-badge-guide": "Images Badge",
   "parallax-hero-images-guide": "Parallax Hero Images",
   "infinite-marquee-guide": "Infinite Marquee",
   "animated-list-guide": "Animated List",
   "dock-guide": "Interactive Dock",
-  "lens-guide": "Interactive Lens"
+  "lens-guide": "Interactive Lens",
+  "animated-beam-guide": "Animated Beam"
 }
