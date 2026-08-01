@@ -10,7 +10,8 @@
     "dock-guide",
     "lens-guide",
     "animated-beam-guide",
-    "border-beam-guide"
+    "border-beam-guide",
+    "shine-border-guide"
   ],
   "images-badge-guide": "Images Badge",
   "parallax-hero-images-guide": "Parallax Hero Images",
@@ -19,5 +20,6 @@
   "dock-guide": "Interactive Dock",
   "lens-guide": "Interactive Lens",
   "animated-beam-guide": "Animated Beam",
-  "border-beam-guide": "Border Beam"
+  "border-beam-guide": "Border Beam",
+  "shine-border-guide": "Shine Border"
 }
