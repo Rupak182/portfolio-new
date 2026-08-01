@@ -9,7 +9,8 @@
     "animated-list-guide",
     "dock-guide",
     "lens-guide",
-    "animated-beam-guide"
+    "animated-beam-guide",
+    "border-beam-guide"
   ],
   "images-badge-guide": "Images Badge",
   "parallax-hero-images-guide": "Parallax Hero Images",
@@ -17,5 +18,6 @@
   "animated-list-guide": "Animated List",
   "dock-guide": "Interactive Dock",
   "lens-guide": "Interactive Lens",
-  "animated-beam-guide": "Animated Beam"
+  "animated-beam-guide": "Animated Beam",
+  "border-beam-guide": "Border Beam"
 }
