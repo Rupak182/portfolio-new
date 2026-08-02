@@ -6,7 +6,11 @@ const withMDX = createMDX({
   // configPath: "source.config.ts"
 })
 
-const nextConfig: NextConfig = {}
+const nextConfig: NextConfig = {
+  turbopack: {
+    root: __dirname,
+  },
+}
 
 export default withMDX(nextConfig)
 
