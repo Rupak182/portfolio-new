@@ -11,7 +11,8 @@
     "lens-guide",
     "animated-beam-guide",
     "border-beam-guide",
-    "shine-border-guide"
+    "shine-border-guide",
+    "blur-fade-guide"
   ],
   "images-badge-guide": "Images Badge",
   "parallax-hero-images-guide": "Parallax Hero Images",
@@ -21,5 +22,6 @@
   "lens-guide": "Interactive Lens",
   "animated-beam-guide": "Animated Beam",
   "border-beam-guide": "Border Beam",
-  "shine-border-guide": "Shine Border"
+  "shine-border-guide": "Shine Border",
+  "blur-fade-guide": "Blur Fade"
 }
