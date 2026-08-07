@@ -13,7 +13,8 @@
     "border-beam",
     "shine-border",
     "blur-fade",
-    "text-animate"
+    "text-animate",
+    "video-text"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -25,5 +26,6 @@
   "border-beam": "Border Beam",
   "shine-border": "Shine Border",
   "blur-fade": "Blur Fade",
-  "text-animate": "Text Animate"
+  "text-animate": "Text Animate",
+  "video-text": "Video Text"
 }
