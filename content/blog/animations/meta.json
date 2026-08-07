@@ -14,7 +14,8 @@
     "shine-border",
     "blur-fade",
     "text-animate",
-    "video-text"
+    "video-text",
+    "number-ticker"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -27,5 +28,6 @@
   "shine-border": "Shine Border",
   "blur-fade": "Blur Fade",
   "text-animate": "Text Animate",
-  "video-text": "Video Text"
+  "video-text": "Video Text",
+  "number-ticker": "Number Ticker"
 }
