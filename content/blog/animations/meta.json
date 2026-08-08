@@ -16,7 +16,8 @@
     "text-animate",
     "video-text",
     "number-ticker",
-    "hyper-text"
+    "hyper-text",
+    "scroll-based-velocity"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -31,5 +32,6 @@
   "text-animate": "Text Animate",
   "video-text": "Video Text",
   "number-ticker": "Number Ticker",
-  "hyper-text": "Hyper Text"
+  "hyper-text": "Hyper Text",
+  "scroll-based-velocity": "Scroll Based Velocity"
 }
