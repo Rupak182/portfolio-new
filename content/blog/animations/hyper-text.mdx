@@ -1,0 +1,358 @@
+---
+title: Hyper Text
+description: "An explanation of how the HyperText component works: generating a text-scrambling animation loop using requestAnimationFrame, performance.now(), and theme-aware CSS layouts."
+date: 2026-08-07
+tags: ["Animations", "Framer Motion", "React", "TypeScript", "Performance"]
+---
+
+Technical breakdown of the **HyperText** component: a customizable text-scrambling effect that animates through random characters before resolving inline to the target text. By utilizing browser rendering loops and scroll intersection observers, the component provides fluid transitions without visual layout shifts.
+
+> [!NOTE]
+> This component is inspired by the [Magic UI Hyper Text](https://magicui.design/docs/components/hyper-text).
+
+<img src="/assets/hyper-text-demo.gif" alt="Hyper Text Demo" className="mx-auto my-8 block rounded-md max-w-[600px] w-full" />
+
+---
+
+## 1. High-Level Flow Chart
+
+The diagram below outlines the runtime behaviors, inputs, state switches, animation frame progression, and cleanup routines of the `HyperText` component:
+
+<img src="/assets/hyper-text-flow.svg" alt="Hyper Text Flowchart" className="mx-auto my-8 block dark:invert max-w-[500px] w-full" />
+
+---
+
+## 2. Component Implementation (`hyper-text.tsx`)
+
+Below is the complete React implementation of the `HyperText` component:
+
+```tsx
+"use client"
+
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type RefAttributes,
+} from "react"
+import {
+  AnimatePresence,
+  motion,
+  type DOMMotionComponents,
+  type HTMLMotionProps,
+  type MotionProps,
+} from "motion/react"
+
+import { cn } from "@/lib/utils"
+
+type CharacterSet = string[] | readonly string[]
+
+const motionElements = {
+  article: motion.article,
+  div: motion.div,
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
+  h4: motion.h4,
+  h5: motion.h5,
+  h6: motion.h6,
+  li: motion.li,
+  p: motion.p,
+  section: motion.section,
+  span: motion.span,
+} as const
+
+type MotionElementType = Extract<
+  keyof DOMMotionComponents,
+  keyof typeof motionElements
+>
+type HyperTextMotionComponent = ComponentType<
+  Omit<HTMLMotionProps<"div">, "ref"> & RefAttributes<HTMLElement>
+>
+
+interface HyperTextProps extends Omit<MotionProps, "children"> {
+  /** The text content to be animated */
+  children: string
+  /** Optional className for styling */
+  className?: string
+  /** Duration of the animation in milliseconds */
+  duration?: number
+  /** Delay before animation starts in milliseconds */
+  delay?: number
+  /** Component to render as - defaults to div */
+  as?: MotionElementType
+  /** Whether to start animation when element comes into view */
+  startOnView?: boolean
+  /** Whether to trigger animation on hover */
+  animateOnHover?: boolean
+  /** Custom character set for scramble effect. Defaults to uppercase alphabet */
+  characterSet?: CharacterSet
+}
+
+const DEFAULT_CHARACTER_SET = Object.freeze(
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+) as readonly string[]
+
+const getRandomInt = (max: number): number => Math.floor(Math.random() * max)
+
+export function HyperText({
+  children,
+  className,
+  duration = 800,
+  delay = 0,
+  as: Component = "div",
+  startOnView = true,
+  animateOnHover = true,
+  characterSet = DEFAULT_CHARACTER_SET,
+  ...props
+}: HyperTextProps) {
+  const MotionComponent = motionElements[Component] as HyperTextMotionComponent
+
+  const [displayText, setDisplayText] = useState<string[]>(() =>
+    children.split("")
+  )
+  const [isAnimating, setIsAnimating] = useState(false)
+  const iterationCount = useRef(0)
+  const elementRef = useRef<HTMLElement | null>(null)
+
+  const handleAnimationTrigger = () => {
+    if (animateOnHover && !isAnimating) {
+      iterationCount.current = 0
+      setIsAnimating(true)
+    }
+  }
+
+  // Handle animation start based on view or delay
+  useEffect(() => {
+    if (!startOnView) {
+      const startTimeout = setTimeout(() => {
+        setIsAnimating(true)
+      }, delay)
+      return () => clearTimeout(startTimeout)
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            setIsAnimating(true)
+          }, delay)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: "-30% 0px -30% 0px" }
+    )
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [delay, startOnView])
+
+  // Handle scramble animation
+  useEffect(() => {
+    let animationFrameId: number | null = null
+
+    if (isAnimating) {
+      const maxIterations = children.length
+      const startTime = performance.now()
+
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime
+        const progress = Math.min(elapsed / duration, 1)
+
+        iterationCount.current = progress * maxIterations
+
+        setDisplayText((currentText) =>
+          currentText.map((letter, index) =>
+            letter === " "
+              ? letter
+              : index <= iterationCount.current
+                ? children[index]
+                : characterSet[getRandomInt(characterSet.length)]
+          )
+        )
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(animate)
+        } else {
+          setIsAnimating(false)
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate)
+    }
+
+    return () => {
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId)
+      }
+    }
+  }, [children, duration, isAnimating, characterSet])
+
+  return (
+    <MotionComponent
+      ref={elementRef}
+      className={cn("overflow-hidden py-2 text-4xl font-bold", className)}
+      onMouseEnter={handleAnimationTrigger}
+      {...props}
+    >
+      <AnimatePresence>
+        {displayText.map((letter, index) => (
+          <motion.span
+            key={index}
+            className={cn("font-mono", letter === " " ? "w-3" : "")}
+          >
+            {letter.toUpperCase()}
+          </motion.span>
+        ))}
+      </AnimatePresence>
+    </MotionComponent>
+  )
+}
+```
+
+---
+
+## 3. High-Performance Timing: `requestAnimationFrame` vs. `setInterval`
+
+A basic implementation of character-swapping might rely on `setInterval` to drive incremental updates. However, interval timers run independently of browser repaint cycles, introducing dropped frames and visual layout jank. 
+
+`HyperText` implements **`requestAnimationFrame` (RAF)** to orchestrate frame updates:
+* **Paint Cycle Alignment:** The browser executes the RAF callback immediately before the layout and paint stages of its rendering pipeline. This ensures text changes align with display refresh cycles.
+* **Background Auto-Pause:** To optimize resource consumption, `requestAnimationFrame` automatically suspends execution when the browser tab is minimized or inactive, saving CPU cycles and battery power.
+* **Event Loop Integration:** Rather than executing at arbitrary times like timer macros (`setInterval`), RAF callbacks are processed synchronously during the browser's rendering steps, preventing layout thrashing and visual stutter.
+
+---
+
+## 4. Monotonic Clocks with `performance.now()`
+
+To accurately track animation duration, `HyperText` computes the time delta on each frame:
+
+```typescript
+const elapsed = currentTime - startTime
+const progress = Math.min(elapsed / duration, 1)
+```
+
+### The Pitfalls of `Date.now()`
+Standard system time is susceptible to **wall-clock adjustments**:
+1. **Network Time Protocol (NTP) Syncs:** If the computer syncs its date/time over the internet, the clock can jump forward or backward.
+2. **Daylight Saving Adjustments / Manual Changes:** Relocating time zones or system changes causes time disparities.
+
+If a clock jumps backward during animation, the calculation `elapsed = currentTime - startTime` yields a negative number or freezes, crashing the animation lifecycle.
+
+### The Monotonic Guarantee of `performance.now()`
+`performance.now()` queries high-frequency hardware registers built into the physical CPU (such as the **TSC - Time Stamp Counter** or the **HPET - High Precision Event Timer**). 
+* **Cycle-Based Counters:** The counter increments continuously with every CPU cycle. The OS guarantees monotonicity, meaning the time value can **never decrement**.
+* **Sub-Millisecond Floating Resolution:** Provides microsecond-level accuracy (e.g., `1042.842398` ms), making it far more precise than `Date.now()`.
+* **Relative Origin Time:** It measures the time elapsed since the current document began loading, maintaining a completely isolated timeline from the system date.
+
+---
+
+## 5. Intersection Observer and Viewport Margins
+
+To delay animations until elements are in view, the component implements a viewport observer:
+
+```typescript
+const observer = new IntersectionObserver(
+  ([entry]) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        setIsAnimating(true)
+      }, delay)
+      observer.disconnect()
+    }
+  },
+  { threshold: 0.1, rootMargin: "-30% 0px -30% 0px" }
+)
+```
+
+### Viewport Margin Math
+`rootMargin: "-30% 0px -30% 0px"` clips **30% off the top** and **30% off the bottom** of the browser viewport. This shrinks the active trigger scanning zone to the center **40%** of the screen:
+
+```
+ ┌─────────────────────────┐ ▲ Screen Top (0% scrolled in)
+ │                         │ 
+ │  Inactive Top 30%       │ 
+ ├─────────────────────────┤ ◄─── Crossing this boundary triggers it
+ │                         │ 
+ │  Active Center 40%      │ 
+ │                         │ 
+ ├─────────────────────────┤ ◄─── Crossing this boundary triggers it
+ │                         │ 
+ │  Inactive Bottom 30%    │ 
+ └─────────────────────────┘ ▼ Screen Bottom (Element enters here)
+```
+
+1. **`threshold: 0.1`:** Specifies that at least **10%** of the element's height must reside inside the active center zone before firing.
+2. **Immediate Disconnect:** The moment visibility conditions are verified, the observer triggers `observer.disconnect()`. This prevents subsequent scroll changes from rebuilding or re-triggering the scramble.
+3. **Mutual Exclusion:** The `useEffect` block implements an early return statement:
+   ```typescript
+   if (!startOnView) {
+     const startTimeout = setTimeout(() => { ... }, delay)
+     return () => clearTimeout(startTimeout)
+   }
+   ```
+   This guarantees that IntersectionObserver construction is skipped completely if `startOnView` is deactivated, eliminating redundant background watchers. Meanwhile, calling `observer.disconnect()` on trigger or component unmount prevents active watchers from lingering as zombie observers in the browser's memory.
+
+---
+
+## 6. React State vs. Direct DOM Writes
+
+In `HyperText`, the letters are updated frame-by-frame:
+
+```typescript
+setDisplayText((currentText) =>
+  currentText.map((letter, index) =>
+    letter === " "
+      ? letter
+      : index <= iterationCount.current
+        ? children[index]
+        : characterSet[getRandomInt(characterSet.length)]
+  )
+)
+```
+
+### The Performance Overhead of React State Reconciliation
+React state updates are asynchronous and batched. For small strings (e.g. titles or buttons under 30 characters), React can easily compute Virtual DOM differences and write changes to the DOM within the 16.6ms frame budget (under 0.5ms). 
+
+However, if you scramble a large paragraph (e.g. 500 characters), React takes 20ms to 30ms to create and compare 500 virtual span nodes, causing dropped frames (jank).
+
+### High-Performance Fallback: Direct DOM Mutation
+For long strings, bypass React's virtual DOM diffing entirely by referencing the DOM container directly and updating its `.innerText` inside the animation frame. This lets the browser write value updates directly to the screen at a steady 60/120 FPS.
+
+---
+
+## 7. Ref Cleanup & Lifecycle Control
+
+Because the timing loop runs recursively, forgetting to cleanly unmount resources results in severe browser leaks:
+
+```typescript
+return () => {
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId)
+  }
+}
+```
+
+### Leaks Prevented by Cleanup:
+1. **Flicker Actions (Race Conditions):** Repeated hover events trigger multiple loops. Without `cancelAnimationFrame`, multiple loops write to the same character buffer simultaneously, scrambling letters erratically.
+2. **State Updates on Unmounted Elements:** Clicking links away from the page leaves the loop active, trying to update state on deleted components and wasting CPU.
+3. **Memory Leaks:** Closure bindings keep old React scopes cached, preventing the garbage collector from freeing memory on navigation.
+
+---
+
+## 8. Properties Reference
+
+| Property | Default | Type | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | — | `string` | The text content to be scrambled. |
+| `className` | — | `string` | Custom Tailwind CSS selectors. |
+| `duration` | `800` | `number` | Scramble duration in milliseconds. |
+| `delay` | `0` | `number` | Optional trigger delay in milliseconds. |
+| `as` | `"div"` | `MotionElementType` | Polymorphic HTML tag to render as. |
+| `startOnView` | `true` | `boolean` | Trigger scramble when it enters the viewport. |
+| `animateOnHover` | `true` | `boolean` | Reset and run scramble on mouse hover. |
+| `characterSet` | `A-Z` | `CharacterSet` | Character pool for scrambling variations. |

@@ -15,7 +15,8 @@
     "blur-fade",
     "text-animate",
     "video-text",
-    "number-ticker"
+    "number-ticker",
+    "hyper-text"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -29,5 +30,6 @@
   "blur-fade": "Blur Fade",
   "text-animate": "Text Animate",
   "video-text": "Video Text",
-  "number-ticker": "Number Ticker"
+  "number-ticker": "Number Ticker",
+  "hyper-text": "Hyper Text"
 }
