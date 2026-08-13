@@ -19,7 +19,8 @@
     "hyper-text",
     "scroll-based-velocity",
     "morphing-text",
-    "spinning-text"
+    "spinning-text",
+    "highlighter"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -37,5 +38,6 @@
   "hyper-text": "Hyper Text",
   "scroll-based-velocity": "Scroll Based Velocity",
   "morphing-text": "Morphing Text",
-  "spinning-text": "Spinning Text"
+  "spinning-text": "Spinning Text",
+  "highlighter": "Highlighter"
 }
