@@ -20,7 +20,8 @@
     "scroll-based-velocity",
     "morphing-text",
     "spinning-text",
-    "highlighter"
+    "highlighter",
+    "scroll-progress"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -39,5 +40,6 @@
   "scroll-based-velocity": "Scroll Based Velocity",
   "morphing-text": "Morphing Text",
   "spinning-text": "Spinning Text",
-  "highlighter": "Highlighter"
+  "highlighter": "Highlighter",
+  "scroll-progress": "Scroll Progress"
 }
