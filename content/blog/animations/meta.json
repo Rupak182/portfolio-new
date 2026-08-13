@@ -18,7 +18,8 @@
     "number-ticker",
     "hyper-text",
     "scroll-based-velocity",
-    "morphing-text"
+    "morphing-text",
+    "spinning-text"
   ],
   "images-badge": "Images Badge",
   "parallax-hero-images": "Parallax Hero Images",
@@ -35,5 +36,6 @@
   "number-ticker": "Number Ticker",
   "hyper-text": "Hyper Text",
   "scroll-based-velocity": "Scroll Based Velocity",
-  "morphing-text": "Morphing Text"
+  "morphing-text": "Morphing Text",
+  "spinning-text": "Spinning Text"
 }
